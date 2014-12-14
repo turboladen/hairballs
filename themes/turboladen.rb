@@ -21,22 +21,21 @@ Hairballs.add_theme(:turboladen) do |theme|
       end
   end
 
-  theme.auto_indent = true
-
-  define_method(:ruby_preface) do |status=' '|
-    #"【#{project_name} 】#{status} %03n:"
-    #"❪#{project_name} ❫#{status} %03n:"
-    #"❲#{project_name} ❳#{status} %03n:"
-    #"❨#{project_name} ❩#{status} %03n:"
-    #"⟨#{project_name}⟩#{status} %03n:"
-    #"[#{project_name}]#{status} %03n:"
-    #"⎡#{project_name}⎦#{status} %03n:"
-    "⟪#{theme.project_name}⟫#{status} %03n:"
+  theme.prompt do |prompt|
+    prompt.auto_indent = true
+    prompt.preface { |status| "⟪#{theme.project_name}⟫#{status} %03n:" }
+    prompt.i = "#{theme.prompt.preface}%i> "
+    prompt.s = "#{theme.prompt.preface}%i%l "
+    prompt.c = "#{theme.prompt.preface('❊')}%i> "
+    prompt.n = "#{theme.prompt.preface('✚')}%i > "
+    prompt.return = "  ➥ %s\n"
   end
 
-  theme.prompt_i = "#{ruby_preface}%i> "
-  theme.prompt_s = "#{ruby_preface}%i%l "
-  theme.prompt_c = "#{ruby_preface('❊')}%i> "
-  theme.prompt_n = "#{ruby_preface('✚')}%i > "
-  theme.return = "  ➥ %s\n"
+  #"【#{project_name} 】#{status} %03n:"
+  #"❪#{project_name} ❫#{status} %03n:"
+  #"❲#{project_name} ❳#{status} %03n:"
+  #"❨#{project_name} ❩#{status} %03n:"
+  #"⟨#{project_name}⟩#{status} %03n:"
+  #"[#{project_name}]#{status} %03n:"
+  #"⎡#{project_name}⎦#{status} %03n:"
 end
