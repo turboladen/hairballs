@@ -56,12 +56,9 @@ class Hairballs
     end
 
     def use!
-      IRB.conf[:PROMPT][irb_name] = @prompt.configuration
-      puts "IRB conf: #{IRB.conf[:PROMPT][irb_name]}"
-
+      IRB.conf[:PROMPT][irb_name] = @prompt.irb_configuration
+      do_bundler_extending if @extend_bundler
       require_libraries
-      puts "Done requiring."
-      puts "Setting prompt mode to #{irb_name}"
       IRB.conf[:PROMPT_MODE] = irb_name
     end
 

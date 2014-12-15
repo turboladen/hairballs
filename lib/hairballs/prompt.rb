@@ -9,43 +9,35 @@ class Hairballs
 
     def initialize
       @auto_indent = nil
-      @preface = ''
       @return = ''
     end
 
     def i
-      @i ? "#{@preface}#{@i}" : nil
+      "#{@preface}#{@i}"
     end
 
     def s
-      @s ? "#{@preface}#{@s}" : nil
+      "#{@preface}#{@s}"
     end
 
     def c
-      @c ? "#{@preface}#{@c}" : nil
+      "#{@preface}#{@c}"
     end
 
     def n
-      @n ? "#{@preface}#{@n}" : nil
+      "#{@preface}#{@n}"
     end
 
-    def preface(string=nil)
-      return @preface if @preface && string.nil? && !block_given?
-
-      status = ' '
-      @preface = block_given? ? yield(status) : ''
-    end
-
-    def configuration
+    def irb_configuration
       puts "Setting up prompt..."
 
       prompt_values = {}
-      prompt_values[:AUTO_INDENT] = @auto_indent
-      prompt_values[:PROMPT_C] = c
-      prompt_values[:PROMPT_I] = i
-      prompt_values[:PROMPT_N] = n
-      prompt_values[:PROMPT_S] = s
-      prompt_values[:RETURN] = @return
+      prompt_values[:AUTO_INDENT] = @auto_indent if @auto_indent
+      prompt_values[:PROMPT_C] = c unless c.empty?
+      prompt_values[:PROMPT_I] = i unless i.empty?
+      prompt_values[:PROMPT_N] = n unless n.empty?
+      prompt_values[:PROMPT_S] = s unless s.empty?
+      prompt_values[:RETURN] = @return if @return
 
       prompt_values
     end
