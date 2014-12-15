@@ -15,55 +15,43 @@ class Hairballs
       @project_name ||= File.basename(Dir.pwd)
     end
 
-    # Set up the prompt for a Rails environment.
-    def set_up_for_rails
-      do_bundler
+    # @param libs [Array<String>]
+    def libraries(libs=nil)
+      return @libraries if @libraries && libs.nil? && !block_given?
 
-      IRB.conf[:PROMPT][:RAILS] = {
-        AUTO_INDENT: true,
-        PROMPT_I: "#{project_name}> ",    # normal prompt
-        PROMPT_S: "#{project_name}✹ ",    # prompt when continuing a string
-        PROMPT_C: "#{project_name}✚ ",    # prompt when continuing a statement
-        RETURN:   "➥ %s\n"            # prefixes output
-      }
+      if libs.nil? && !block_given?
+        fail ArgumentError, "Must either provide an Array or a block."
+      end
 
-      IRB.conf[:PROMPT_MODE] = :RAILS
-      IRB.conf[:AUTO_INDENT] = true
-    end
+      @libraries = if block_given?
+        libs = yield
 
-    def set_up_irb_history
-      IRB.conf[:SAVE_HISTORY] = 1000
-      IRB.conf[:EVAL_HISTORY] = 20
-    end
+        unless libs.kind_of?(Array)
+          fail ArgumentError, "Block must return an Array."
+        end
 
-    # Do the wirble things.
-    def init_wirble
-      if defined? Wirble
-        Wirble.init
-        Wirble.colorize
+        libs
+      else
+        libs
       end
     end
 
-    # Do the awesome_print things.
-    def init_awesome_print
-      if defined? AwesomePrint
-        AwesomePrint.irb!
+    # Requires #libraries on load.  If they're not installed, install them.  If
+    # it can't be installed, move on to the next.
+    def require_libraries
+      @libraries.each do |lib|
+        retry_count = 0
 
-        IRB::Irb.class_eval do
-          def output_value
-            require 'json'
-            is_json = JSON.parse(@context.last_value) rescue nil
-
-            if is_json
-              puts JSON.pretty_generate(JSON.parse(@context.last_value)).blue
-              #puts JSON.pretty_generate(@context.last_value).blue
-            elsif @context.respond_to? :to_sym
-              ap @context.last_value
-            else
-              ap @context.last_value
-              #puts @context.last_value
-            end
-          end
+        begin
+          next if retry_count == 2
+          puts "Requiring library: #{lib}"
+          require lib
+        rescue LoadError
+          puts "#{lib} not installed; installing now..."
+          Gem.install lib
+          require lib
+          retry_count += 1
+          retry
         end
       end
     end
