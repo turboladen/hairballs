@@ -6,6 +6,7 @@ class Hairballs
     include Hairballs::Helpers
 
     attr_accessor :name
+    attr_accessor :extend_bundler
 
     # @param name [Symbol]
     def initialize(name)
@@ -72,6 +73,41 @@ class Hairballs
     # @return [Hairballs::Prompt]
     def prompt
       block_given? ? yield(@prompt) : @prompt
+    end
+
+    #---------------------------------------------------------------------------
+    # PRIVATES
+    #---------------------------------------------------------------------------
+
+    private
+
+    # Add all gems in the global gemset to the $LOAD_PATH so they can be used even
+    # in places like 'rails console'.
+    def do_bundler_extending
+      if defined?(::Bundler)
+        all_global_gem_paths = Dir.glob("#{Gem.dir}/gems/*")
+
+        all_global_gem_paths.each do |p|
+          gem_path = "#{p}/lib"
+          $:.unshift(gem_path)
+        end
+      else
+        puts 'Bundler not defined.  Skipping.'
+      end
+    end
+
+    # Undo the stuff that was done in #do_bundler_extending.
+    def undo_bundler_extending
+      if defined?(::Bundler)
+        all_global_gem_paths = Dir.glob("#{Gem.dir}/gems/*")
+
+        all_global_gem_paths.each do |p|
+          gem_path = "#{p}/lib"
+          $:.delete(gem_path)
+        end
+      else
+        puts 'Bundler not defined.  Skipping.'
+      end
     end
   end
 end

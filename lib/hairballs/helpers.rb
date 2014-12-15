@@ -1,31 +1,6 @@
 class Hairballs
   module Helpers
 
-    # Add all gems in the global gemset to the $LOAD_PATH so they can be used even
-    # in places like 'rails console'.
-    def do_bundler
-      if defined?(::Bundler)
-        all_global_gem_paths = Dir.glob("#{Gem.dir}/gems/*")
-
-        all_global_gem_paths.each do |p|
-          gem_path = "#{p}/lib"
-          $:.unshift(gem_path)
-        end
-      end
-    end
-
-    # Undo the stuff that was done in #do_bundler
-    def undo_bundler
-      if defined?(::Bundler)
-        all_global_gem_paths = Dir.glob("#{Gem.dir}/gems/*")
-
-        all_global_gem_paths.each do |p|
-          gem_path = "#{p}/lib"
-          $:.delete(gem_path)
-        end
-      end
-    end
-
     # Is IRB getting loaded for a rails console?
     #
     # @return [Boolean]
