@@ -1,8 +1,10 @@
 require_relative 'hairballs/version'
+require_relative 'hairballs/helpers'
 require_relative 'hairballs/theme'
 
-
 class Hairballs
+  extend Helpers
+
   def self.themes
     @themes ||= []
   end
@@ -17,7 +19,7 @@ class Hairballs
 
   def self.use_theme(theme_name)
     switch_to = themes.find { |theme| theme.name == theme_name }
-    fail 'meow' unless switch_to
+    fail "Theme not found: :#{theme_name}." unless switch_to
     puts "found theme: #{switch_to.name}"
 
     switch_to.use!
