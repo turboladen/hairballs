@@ -1,7 +1,7 @@
 require_relative '../../hairballs'
 
 Hairballs.add_plugin(:object_ri) do |plugin|
-  plugin.libraries %w[rdoc]
+  plugin.libraries %w(rdoc)
 
   plugin.when_used do
     Object.class_eval do

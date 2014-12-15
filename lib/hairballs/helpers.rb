@@ -1,39 +1,18 @@
 class Hairballs
+  # Helpers specifying and requiring dependencies for Themes and Plugins.
   module Helpers
-
-    # Is IRB getting loaded for a rails console?
-    #
-    # @return [Boolean]
-    def rails?
-      ENV['RAILS_ENV'] || defined? Rails
-    end
-
-    # Name of the relative directory.
-    #
-    # @return [String]
-    def project_name
-      @project_name ||= File.basename(Dir.pwd)
-    end
-
     # @param libs [Array<String>]
     def libraries(libs=nil)
-      return @libraries if @libraries && libs.nil? && !block_given?
+      return @libraries if @libraries && libs.nil?
 
-      if libs.nil? && !block_given?
-        fail ArgumentError, "Must either provide an Array or a block."
+      @libraries = block_given? ? yield : libs
+
+      unless @libraries.is_a?(Array)
+        fail ArgumentError,
+          "Block must return an Array but returned #{@libraries}."
       end
 
-      @libraries = if block_given?
-        libs = yield
-
-        unless libs.kind_of?(Array)
-          fail ArgumentError, "Block must return an Array."
-        end
-
-        libs
-      else
-        libs
-      end
+      @libraries
     end
 
     # Requires #libraries on load.  If they're not installed, install them.  If
@@ -57,6 +36,5 @@ class Hairballs
         end
       end
     end
-
   end
 end

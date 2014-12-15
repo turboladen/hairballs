@@ -2,7 +2,7 @@ require_relative '../../hairballs'
 
 # http://stackoverflow.com/a/123834/172106
 Hairballs.add_plugin(:quick_benchmark) do |plugin|
-  plugin.libraries %w[benchmark]
+  plugin.libraries %w(benchmark)
 
   plugin.when_used do
     Kernel.module_eval do

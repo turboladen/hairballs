@@ -4,7 +4,7 @@ require_relative '../../hairballs'
 #
 # TODO: fix to work with using/loading before Wirble.
 Hairballs.add_plugin(:colorize_json) do |plugin|
-  plugin.libraries %w[json colorize]
+  plugin.libraries %w(json colorize)
 
   plugin.when_used do
     IRB::Irb.class_eval do
