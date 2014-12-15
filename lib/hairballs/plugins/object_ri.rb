@@ -1,12 +1,13 @@
 require_relative '../../hairballs'
 
+# Directly lifted from rbates/dotfiles!  Adds +#ri+ to all Objects, letting you
+# get ri docs from within your IRB session.
 Hairballs.add_plugin(:object_ri) do |plugin|
   plugin.libraries %w(rdoc)
 
   plugin.when_used do
     Object.class_eval do
-      # Directly lifted from rbates/dotfiles!
-      def ri(method = nil)
+      def ri(method=nil)
         unless method && method =~ /^[A-Z]/ # if class isn't specified
           klass = self.kind_of?(Class) ? name : self.class.name
           method = [klass, method].compact.join('#')

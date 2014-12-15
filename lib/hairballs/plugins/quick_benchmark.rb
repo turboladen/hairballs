@@ -1,6 +1,8 @@
 require_relative '../../hairballs'
 
-# http://stackoverflow.com/a/123834/172106
+# Quick and dirty benchmarking of whatever block you pass to the method.
+#
+# @see http://stackoverflow.com/a/123834/172106
 Hairballs.add_plugin(:quick_benchmark) do |plugin|
   plugin.libraries %w(benchmark)
 

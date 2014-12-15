@@ -81,7 +81,7 @@ class Hairballs
       fail PluginLoadFailure.new(plugin_name) unless plugin_to_use
       vputs "Using plugin: #{plugin_name}"
 
-      plugin_to_use.use!(options)
+      plugin_to_use.load!(options)
       loaded_plugins << plugin_to_use
 
       true
