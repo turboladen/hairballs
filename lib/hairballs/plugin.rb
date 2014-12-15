@@ -23,8 +23,8 @@ class Hairballs
       end
     end
 
-    def configure_irb(&block)
-      @irb_configuration = block
+    def when_used(&block)
+      @when_used = block
     end
 
     def use!(**options)
@@ -33,7 +33,7 @@ class Hairballs
       end
 
       require_libraries
-      @irb_configuration.call
+      @when_used.call
     end
   end
 end

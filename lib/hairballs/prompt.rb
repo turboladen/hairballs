@@ -29,7 +29,7 @@ class Hairballs
     end
 
     def irb_configuration
-      puts "Setting up prompt..."
+      vputs "Setting up prompt..."
 
       prompt_values = {}
       prompt_values[:AUTO_INDENT] = @auto_indent if @auto_indent

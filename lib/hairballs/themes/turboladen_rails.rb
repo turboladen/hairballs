@@ -4,10 +4,6 @@ Hairballs.add_theme(:turboladen_rails) do |theme|
   theme.libraries do
     libs_to_require = %w[
       irb/completion
-      irb/ext/save-history
-      rdoc
-      awesome_print
-      wirble
       looksee
     ]
 
