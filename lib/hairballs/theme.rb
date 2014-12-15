@@ -17,6 +17,7 @@ class Hairballs
     def use!
       do_bundler_extending if @extend_bundler
       require_libraries
+      @prompt_block.call(@prompt)
       IRB.conf[:PROMPT][irb_name] = @prompt.irb_configuration
       IRB.conf[:PROMPT_MODE] = irb_name
     end
@@ -27,8 +28,8 @@ class Hairballs
     end
 
     # @return [Hairballs::Prompt]
-    def prompt
-      block_given? ? yield(@prompt) : @prompt
+    def prompt(&block)
+      @prompt_block = block
     end
 
     #---------------------------------------------------------------------------

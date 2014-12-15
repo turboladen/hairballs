@@ -5,6 +5,7 @@ Hairballs.add_theme(:turboladen_rails) do |theme|
     libs_to_require = %w[
       irb/completion
       looksee
+      colorize
     ]
 
     libs_to_require += case RUBY_PLATFORM
@@ -23,9 +24,9 @@ Hairballs.add_theme(:turboladen_rails) do |theme|
     prompt.auto_indent = true
     preface = Hairballs.project_name.light_blue
     prompt.i = "#{preface}> "
-    prompt.s = "#{preface}:❊%l> "
-    prompt.c = "#{preface}:⇥ %i> "
-    prompt.n = "#{preface}:⇥ %i> "
+    prompt.s = "#{preface}#{'❊%l'.yellow}> "
+    prompt.c = "#{preface}#{'⇥'.yellow} %i> "
+    prompt.n = "#{preface}#{'⇥'.yellow} %i> "
     prompt.return = "➥ %s\n"
   end
 end
