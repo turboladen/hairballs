@@ -10,5 +10,28 @@ Hairballs.add_plugin(:irb_history, save_history: 1000, eval_history: 20, global_
     unless plugin.global_history_file
       IRB.conf[:HISTORY_FILE] = "#{Dir.home}/.irb_history-#{Hairballs.project_name}"
     end
+
+    Object.class_eval do
+      # All of the ruby lines of code that have been executed.
+      def history
+        0.upto(Readline::HISTORY.size - 1) do |i|
+          printf "%5d %s\n", i, Readline::HISTORY[i]
+        end
+      end
+
+      # Execute one or many lines of Ruby from +history+.
+      #
+      # @param command_numbers [Fixnum,Range]
+      def _!(command_numbers)
+        cmds =
+          if command_numbers.is_a? Range
+            command_numbers.to_a.map { |i| Readline::HISTORY[i] }
+          else
+            [Readline::HISTORY[command_numbers]]
+          end
+
+        cmds.each { |cmd| send(cmd) }
+      end
+    end
   end
 end
