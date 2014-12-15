@@ -1,8 +1,12 @@
 require_relative '../../hairballs'
 
+# Returns only the methods not present on basic Objects.
+#
+# @see http://stackoverflow.com/a/873371/172106
 Hairballs.add_plugin(:interesting_methods) do |plugin|
   plugin.when_used do
     Object.class_eval do
+      # @return [Array<Symbol>]
       def interesting_methods
         case self.class
         when Class

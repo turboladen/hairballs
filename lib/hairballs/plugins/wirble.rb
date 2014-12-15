@@ -1,5 +1,6 @@
 require_relative '../../hairballs'
 
+# Just loads Wirble.
 Hairballs.add_plugin(:wirble) do |plugin|
   plugin.libraries %w(wirble)
 
