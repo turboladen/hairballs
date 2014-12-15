@@ -19,8 +19,6 @@ Hairballs.add_theme(:turboladen) do |theme|
   end
 
   theme.prompt do |prompt|
-    require 'colorize'
-
     preface = proc do |status='  '|
       "⟪#{theme.project_name.light_blue}⟫#{status}%03n"
     end
