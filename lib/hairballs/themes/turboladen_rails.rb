@@ -21,10 +21,11 @@ Hairballs.add_theme(:turboladen_rails) do |theme|
 
   theme.prompt do |prompt|
     prompt.auto_indent = true
-    prompt.i = "#{Hairballs.project_name}> "
-    prompt.s = "#{Hairballs.project_name}:❊%l> "
-    prompt.c = "#{Hairballs.project_name}:⇥ %i> "
-    prompt.n = "#{Hairballs.project_name}:⇥ %i> "
+    preface = Hairballs.project_name.light_blue
+    prompt.i = "#{preface}> "
+    prompt.s = "#{preface}:❊%l> "
+    prompt.c = "#{preface}:⇥ %i> "
+    prompt.n = "#{preface}:⇥ %i> "
     prompt.return = "➥ %s\n"
   end
 end
