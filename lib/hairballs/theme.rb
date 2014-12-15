@@ -48,7 +48,7 @@ class Hairballs
           $:.unshift(gem_path)
         end
       else
-        puts 'Bundler not defined.  Skipping.'
+        vputs 'Bundler not defined.  Skipping.'
       end
     end
 
@@ -62,7 +62,7 @@ class Hairballs
           $:.delete(gem_path)
         end
       else
-        puts 'Bundler not defined.  Skipping.'
+        vputs 'Bundler not defined.  Skipping.'
       end
     end
   end

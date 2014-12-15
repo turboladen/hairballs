@@ -39,15 +39,17 @@ class Hairballs
     # Requires #libraries on load.  If they're not installed, install them.  If
     # it can't be installed, move on to the next.
     def require_libraries
+      return if @libraries.nil?
+
       @libraries.each do |lib|
         retry_count = 0
 
         begin
           next if retry_count == 2
-          puts "Requiring library: #{lib}"
+          vputs "Requiring library: #{lib}"
           require lib
         rescue LoadError
-          puts "#{lib} not installed; installing now..."
+          vputs "#{lib} not installed; installing now..."
           Gem.install lib
           require lib
           retry_count += 1
@@ -56,28 +58,5 @@ class Hairballs
       end
     end
 
-    def inject_helper_methods
-      #class Object
-      Object.class_eval do
-        def interesting_methods
-          case self.class
-          when Class
-            self.public_methods.sort - Object.public_methods
-          when Module
-            self.public_methods.sort - Module.public_methods
-          else
-            self.public_methods.sort - Object.new.public_methods
-          end
-        end
-
-        def ri(method = nil)
-          unless method && method =~ /^[A-Z]/ # if class isn't specified
-            klass = self.kind_of?(Class) ? name : self.class.name
-            method = [klass, method].compact.join('#')
-          end
-          system 'ri', method.to_s
-        end
-      end
-    end
   end
 end

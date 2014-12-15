@@ -1,3 +1,4 @@
+require_relative 'hairballs/ext/kernel_vputs'
 require_relative 'hairballs/version'
 require_relative 'hairballs/helpers'
 require_relative 'hairballs/theme'
@@ -14,6 +15,7 @@ class Hairballs
     theme = Theme.new(name)
     yield theme
     themes << theme
+    vputs "Added theme: #{name}"
 
     theme
   end
@@ -21,6 +23,7 @@ class Hairballs
   def self.use_theme(theme_name)
     switch_to = themes.find { |theme| theme.name == theme_name }
     fail "Theme not found: :#{theme_name}." unless switch_to
+    vputs "Using theme: #{theme_name}"
 
     switch_to.use!
   end
@@ -35,6 +38,7 @@ class Hairballs
     plugin = Plugin.new(name, options)
     yield plugin
     plugins << plugin
+    vputs "Added plugin: #{name}"
 
     plugin
   end
@@ -43,6 +47,7 @@ class Hairballs
   def self.use_plugin(plugin_name, **options)
     plugin_to_use = plugins.find { |plugin| plugin.name == plugin_name }
     fail "Plugin not found: :#{plugin_name}." unless plugin_to_use
+    vputs "Using plugin: #{plugin_name}"
 
     plugin_to_use.use!(options)
   end
