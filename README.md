@@ -11,12 +11,20 @@ haIRBalls is a framework for managing your IRB configuration.
 Installation
 ------------
 
-Install it yourself as:
+For non-Bundlered apps, install it yourself as:
 
     $ gem install hairballs
 
-You probably don't need to add this to any Gemfile of any sort since Hairballs
-and all plugin-required gems will work just fine along-side Bundler.
+For Bundlered apps, you have a couple options:
+
+1. Add `gem 'hairballs'` to your Gemfile.
+1. Manually add `hairballs` to the load path:
+
+    ```ruby
+    hairballs_path = Dir.glob("#{Gem.dir}/gems/hairballs-*/lib")
+    $LOAD_PATH.unshift(hairballs_path.first) unless hairballs_path.empty?
+    require 'hairballs'
+    ```
 
 Usage
 -----
