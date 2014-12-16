@@ -36,7 +36,7 @@ class Hairballs
             $LOAD_PATH.unshift("#{installed_gem}/lib")
           end
 
-          puts require lib
+          require lib
           retry_count += 1
           retry
         end
