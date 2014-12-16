@@ -204,8 +204,8 @@ Some problems I faced:
   have to add them to your Gemfile to add them to the bundle.
     * This doesn't make sense to me.  You shouldn't make the others that are
       developing that app with you use gems for *your* IRB configuration.
-    * *Solution:* `Hairballs::Helpers#libraries` and
-      `Hairballs::Helpers#require_libraries`, which are available to *Themes*
+    * *Solution:* `Hairballs::LibraryHelpers#libraries` and
+      `Hairballs::LibraryHelpers#require_libraries`, which are available to *Themes*
       and *Plugins*.
 * I want different prompt styles for regular ol' IRB vs Rails console.
     * *Solution:* `Hairballs::Theme`s.
@@ -214,8 +214,8 @@ Some problems I faced:
 * Installing and using new Rubies then running IRB meant I had to exit out and
   manually install them all.
     * zzzzzzzz...
-    * *Solution:* `Hairballs::Helpers#libraries` and
-      `Hairballs::Helpers#require_libraries`.
+    * *Solution:* `Hairballs::LibraryHelpers#libraries` and
+      `Hairballs::LibraryHelpers#require_libraries`.
 * I kept having problems with IRB and history getting all out of order--usually
   with Rails.  I was using `'irb/history'`, but trying to figure out what was
   wrong was difficult since my .irbrc had become a sprawling mass of one-off

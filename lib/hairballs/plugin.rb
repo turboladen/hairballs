@@ -1,4 +1,4 @@
-require_relative 'helpers'
+require_relative 'library_helpers'
 
 class Hairballs
   # Plugins provide means for adding functionality to your IRB sessions.  They
@@ -6,8 +6,8 @@ class Hairballs
   # be.
   #
   # One benefit of making a simple plugin for requiring other deps is
-  # Hairballs::Helpers#require_libraries method.  When used in conjunction with
-  # Hairballs::Helpers#libraries, you don't have to worry about installing the
+  # Hairballs::LibraryHelpers#require_libraries method.  When used in conjunction with
+  # Hairballs::LibraryHelpers#libraries, you don't have to worry about installing the
   # gems before using IRB.  This is particularly helpful when using a Ruby
   # manager (RVM, rbenv, etc) and you install a new Ruby; if you don't think
   # ahead to install your IRB deps, your IRB session won't behave like you
@@ -19,7 +19,7 @@ class Hairballs
   # not until you `Hairballs.load_plugin(:blargh)` that the code that defines
   # your plugin will get executed.
   class Plugin
-    include Helpers
+    include LibraryHelpers
 
     # @return [Symbol]
     attr_reader :name

@@ -1,4 +1,4 @@
-require_relative 'helpers'
+require_relative 'library_helpers'
 require_relative 'prompt'
 
 class Hairballs
@@ -10,7 +10,7 @@ class Hairballs
   # +Hairballs.add_theme()+ and +Hairballs.use_theme()+ should cover most use
   # cases.
   class Theme
-    include Hairballs::Helpers
+    include LibraryHelpers
 
     # Just an identifier for the Theme.  Don't name two themes the same
     # name--that will cause problems.
