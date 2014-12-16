@@ -70,34 +70,5 @@ class Hairballs
       IRB.conf[:PROMPT_MODE] = irb_name
       IRB.CurrentContext.prompt_mode = irb_name if IRB.CurrentContext
     end
-
-    # Add all gems in the global gemset to the $LOAD_PATH so they can be used
-    # even in places like 'rails console'.
-    def do_bundler_extending
-      if defined?(::Bundler)
-        all_global_gem_paths = Dir.glob("#{Gem.dir}/gems/*")
-
-        all_global_gem_paths.each do |p|
-          gem_path = "#{p}/lib"
-          $LOAD_PATH.unshift(gem_path)
-        end
-      else
-        vputs 'Bundler not defined.  Skipping.'
-      end
-    end
-
-    # Undo the stuff that was done in #do_bundler_extending.
-    def undo_bundler_extending
-      if defined?(::Bundler)
-        all_global_gem_paths = Dir.glob("#{Gem.dir}/gems/*")
-
-        all_global_gem_paths.each do |p|
-          gem_path = "#{p}/lib"
-          $LOAD_PATH.delete(gem_path)
-        end
-      else
-        vputs 'Bundler not defined.  Skipping.'
-      end
-    end
   end
 end
