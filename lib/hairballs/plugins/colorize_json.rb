@@ -10,7 +10,7 @@ require_relative '../../hairballs'
 Hairballs.add_plugin(:colorize_json, color: :blue) do |plugin|
   plugin.libraries %w(json colorize)
 
-  plugin.when_used do
+  plugin.on_load do
     IRB::Irb.class_eval do
       alias_method :old_output_value, :output_value
 

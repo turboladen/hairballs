@@ -6,7 +6,7 @@ require_relative '../../hairballs'
 Hairballs.add_plugin(:quick_benchmark) do |plugin|
   plugin.libraries %w(benchmark)
 
-  plugin.when_used do
+  plugin.on_load do
     Kernel.module_eval do
       def quick_benchmark(repetitions=100, &block)
         Benchmark.bmbm do |b|

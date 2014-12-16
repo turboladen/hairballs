@@ -161,7 +161,7 @@ but keeps the code for doing so outside of my .irbrc.
 Hairballs.add_plugin(:wirble) do |plugin|
   plugin.libraries %w(wirble)
 
-  plugin.when_used do
+  plugin.on_load do
     Wirble.init
     Wirble.colorize
   end
