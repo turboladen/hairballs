@@ -18,7 +18,7 @@ Hairballs.add_plugin(:colorize_json, color: :blue) do |plugin|
         is_json = JSON.parse(@context.last_value) rescue nil
 
         if is_json
-          vputs 'return value is JSON-like'
+          vputs "[#{plugin.name}] Return value is JSON-like"
           printf @context.return_format,
             JSON.pretty_generate(JSON.parse(@context.last_value)).colorize(plugin.color)
         else
