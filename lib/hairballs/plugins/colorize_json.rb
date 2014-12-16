@@ -14,12 +14,13 @@ Hairballs.add_plugin(:colorize_json, color: :blue) do |plugin|
     IRB::Irb.class_eval do
       alias_method :old_output_value, :output_value
 
-      def output_value
+      define_method :output_value do
         is_json = JSON.parse(@context.last_value) rescue nil
 
         if is_json
           vputs 'return value is JSON-like'
-          printf @context.return_format, JSON.pretty_generate(JSON.parse(@context.last_value)).colorize(color)
+          printf @context.return_format,
+            JSON.pretty_generate(JSON.parse(@context.last_value)).colorize(plugin.color)
         else
           old_output_value
         end
