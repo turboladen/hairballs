@@ -98,7 +98,7 @@ class Hairballs
     #
     # @return [Boolean]
     def rails?
-      ENV['RAILS_ENV'] || defined? Rails
+      ENV.has_key?('RAILS_ENV') || !!defined?(Rails)
     end
   end
 end
