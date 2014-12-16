@@ -28,12 +28,57 @@ class Hairballs
           vputs "Requiring library: #{lib}"
           require lib
         rescue LoadError
-          vputs "#{lib} not installed; installing now..."
+          puts "#{lib} not installed; installing now..."
           Gem.install lib
-          require lib
+
+          if Hairballs.rails?
+            installed_gem = find_latest_gem(lib)
+            $LOAD_PATH.unshift("#{installed_gem}/lib")
+          end
+
+          puts require lib
           retry_count += 1
           retry
         end
+      end
+    end
+
+    def find_latest_gem(gem_name)
+      the_gem = Dir.glob("#{Gem.dir}/gems/#{gem_name}-*")
+
+      the_gem.empty? ? nil : the_gem.first
+    end
+
+    # Add all gems in the global gemset to the $LOAD_PATH so they can be used
+    # even in places like 'rails console'.
+    #
+    # TODO: Use #find_latest_gem for each of #libraries.
+    def do_bundler_extending
+      if defined?(::Bundler)
+        all_global_gem_paths = Dir.glob("#{Gem.dir}/gems/*")
+
+        all_global_gem_paths.each do |p|
+          gem_path = "#{p}/lib"
+          $LOAD_PATH.unshift(gem_path)
+        end
+      else
+        vputs 'Bundler not defined.  Skipping.'
+      end
+    end
+
+    # Undo the stuff that was done in #do_bundler_extending.
+    #
+    # TODO: Use #find_latest_gem for each of #libraries.
+    def undo_bundler_extending
+      if defined?(::Bundler)
+        all_global_gem_paths = Dir.glob("#{Gem.dir}/gems/*")
+
+        all_global_gem_paths.each do |p|
+          gem_path = "#{p}/lib"
+          $LOAD_PATH.delete(gem_path)
+        end
+      else
+        vputs 'Bundler not defined.  Skipping.'
       end
     end
   end
