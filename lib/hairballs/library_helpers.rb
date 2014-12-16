@@ -1,6 +1,6 @@
 class Hairballs
   # Helpers specifying and requiring dependencies for Themes and Plugins.
-  module Helpers
+  module LibraryHelpers
     # @param libs [Array<String>]
     def libraries(libs=nil)
       return @libraries if @libraries && libs.nil?
