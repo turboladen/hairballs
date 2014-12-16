@@ -66,9 +66,45 @@ class Hairballs
     # Does all the things that are required for getting IRB to use your Theme.
     def set_up_prompt
       @prompt_block.call(@prompt)
+
+      if IRB.conf[:PROMPT].nil? && defined?(Pry)
+        set_up_pry_prompt
+        set_up_pry_printer
+      elsif IRB.conf[:PROMPT]
+        set_up_irb_prompt
+      else
+        message = "[Hairballs] Seems like you're not using Pry *or* IRB."
+        puts "#{message}  Skipping prompt setup."
+      end
+    end
+
+    def set_up_irb_prompt
       IRB.conf[:PROMPT][irb_name] = @prompt.irb_configuration
       IRB.conf[:PROMPT_MODE] = irb_name
       IRB.CurrentContext.prompt_mode = irb_name if IRB.CurrentContext
+    end
+
+    def set_up_pry_prompt
+      if @prompt.normal && @prompt.continued_statement
+        ::Pry.config.prompt = [
+          proc { @prompt.normal }, proc { @prompt.continued_statement }
+        ]
+      elsif @prompt.normal
+        ::Pry.config.prompt = -> { @prompt.normal }
+      else
+        vputs 'Neither "normal" nor "continued_statement" prompts configured.'
+      end
+    end
+
+    def set_up_pry_printer
+      puts "@pompt return format: #{@prompt.return_format}"
+      if @prompt.return_format
+        Pry.config.print = proc do |output, value|
+          output.printf @prompt.return_format, value.inspect
+        end
+      else
+        vputs '"return_format" not configured.'
+      end
     end
   end
 end

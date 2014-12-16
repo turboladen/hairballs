@@ -1,6 +1,8 @@
 class Hairballs
   # Hairballs representation of IRB.conf[:PROMPT].  Method names here make
   # prompt types clearer.
+  #
+  # TODO: Make it nicer to define Pry prompts.
   class Prompt
     # @param [Boolean]
     attr_accessor :auto_indent
@@ -42,11 +44,6 @@ class Hairballs
     #
     # @param [String]
     attr_accessor :return_format
-
-    def initialize
-      @auto_indent = nil
-      @return_format = ''
-    end
 
     # @return [Hash] A set of key/value pairs that can be used to pass to a
     #   IRB.conf[:PROMPT][ prompt name ].
