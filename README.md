@@ -1,52 +1,12 @@
-Hairballs
+hairballs
 =========
 
 Aka, "haIRBalls".  Like [oh-my-zsh](http://ohmyz.sh), but for IRB.
 
-But why?
---------
+wat
+---
 
-**tl:dr**
-
-* *Themes* (prompts) and *plugins*.
-* Abstract away some of IRB's weirdness.
-* Manage IRB deps based on your preferences.
-* For Bundler apps, use gems in IRB without having to add them to your Gemfile.
-* Keep `.irbrc` clean.  Make helpers reusable.
-
-**Moar explain.**
-
-There's a lot of (good and not-so-good) IRB tools out there, but I wanted a
-better way to round those up and manage their use in my `.irbrc`.  Problems I
-faced:
-
-* Rails console load ~/.irbrc and if you have gem dependencies in there, you
-  have to add them to your Gemfile to add them to the bundle.
-    * This doesn't make sense to me.  You shouldn't make the others that are
-      developing that app with you use gems for *your* IRB configuration.
-    * *Solution:* `Hairballs::Helpers#libraries` and
-      `Hairballs::Helpers#require_libraries`, which are available to *Themes*
-      and *Plugins*.
-* I want different prompt styles for regular ol' IRB vs Rails console.
-    * *Solution:* `Hairballs::Theme`s.
-* Customizing my prompt(s) felt so clunky!
-    * *Solution:* `Hairballs::Theme`s.
-* Installing and using new Rubies then running IRB meant I had to exit out and
-  manually install them all.
-    * zzzzzzzz...
-    * *Solution:* `Hairballs::Helpers#libraries` and
-      `Hairballs::Helpers#require_libraries`.
-* I kept having problems with IRB and history getting all out of order--usually
-  just with Rails.
-    * *Solution:* `hairballs/plugins/irb_history`.  This sets up IRB to use its
-      `*HISTORY*` settings properly and cleanly.
-* Specifying gems as IRB dependencies for different Ruby interpreters is simple
-  but can clutter up your .irbrc.
-    * Putting the deps with the plugin or theme that needs them keeps everything
-      together and out of the .irbrc.
-    * *Solution:* *Themes* and *Plugins* let you specify only the gems you need
-      for those items.  Logic surrounding that (ex. platform-specific) is kept
-      out of your .irbrc.
+haIRBalls is a framework for managing your IRB configuration.
 
 Installation
 ------------
@@ -55,8 +15,8 @@ Install it yourself as:
 
     $ gem install hairballs
 
-I can't really see a reason to add this to your Gemfile for any reason.
-Hairballs and all plugin-required gems will work just fine along-side Bundler.
+You probably don't need to add this to any Gemfile of any sort since Hairballs
+and all plugin-required gems will work just fine along-side Bundler.
 
 Usage
 -----
@@ -67,9 +27,9 @@ that you add in to your IRB sessions.
 ### Themes ###
 
 Initially *themes* are for defining an IRB prompt using a cleaner API than the
-one provide by IRB.  They are reusable and can be switched on the fly, without
-reloading.  Hairballs also provides methods for dealing with dependencies and
-getting those depedencies to play nice with Bundler.
+one provide by IRB.  They are a) reusable and b) can be switched on the fly,
+without requiring a reload of IRB.  Hairballs also provides methods for dealing
+with dependencies and getting those dependencies to play nice with Bundler.
 
 **Example: A Rails Theme**
 
@@ -181,12 +141,12 @@ themes under lib/hairballs/themes/ for more details and ideas.
 
 *Plugins* are similar to *themes* in that they let you abstract away some code
 from your .irbrc, thus making it cleaner and more maintainable.  The essence of
-plugins, however, is to allow you to change the behavior of IRB; this could mean
-things like:
+plugins, however, is to allow you to change the behavior of or add behavior to
+IRB; this could mean things like:
 
 * Installing and configuring dependencies for IRB use.
 * Adding helper methods to your IRB session.
-* Adding methods to certain objects for debugging.
+* Adding methods to certain objects, say, for debugging.
 * Changing how certain objects are displayed when returned from methods.
 
 **Example: Wirble**
@@ -216,8 +176,59 @@ Hairballs.load_plugin(:wirble)
 Check out the Hairballs::Plugin docs and existing plugins under
 lib/hairballs/plugins/ for more details and ideas.
 
-I've got my `.irbrc` (using Hairballs) stored on the interwebs [here]() if
+I've got my `.irbrc` (using Hairballs) stored on the interwebs
+[here](https://github.com/turboladen/config_files/blob/master/.irbrc) if
 that's of any help or interest.
+
+But whyyyy?
+--------
+
+There's some similar tools out there, but they seemed overly complicated.  IRB
+is a tool for doing development and those, in my opinion, should be as simple
+and straightforward as possible.
+
+**tl:dr**
+
+I wanted to...
+
+* abstract away some of IRB's weirdness.
+* manage IRB dependencies based on my preferences.
+* for Bundler apps, use gems in IRB without having to add them to your Gemfile.
+* keep `.irbrc` clean.  Make helpers reusable.
+
+**Moar explain.**
+
+Some problems I faced:
+
+* Rails console loads ~/.irbrc.  If you have gem dependencies in there, you
+  have to add them to your Gemfile to add them to the bundle.
+    * This doesn't make sense to me.  You shouldn't make the others that are
+      developing that app with you use gems for *your* IRB configuration.
+    * *Solution:* `Hairballs::Helpers#libraries` and
+      `Hairballs::Helpers#require_libraries`, which are available to *Themes*
+      and *Plugins*.
+* I want different prompt styles for regular ol' IRB vs Rails console.
+    * *Solution:* `Hairballs::Theme`s.
+* Customizing my prompt(s) felt so clunky!
+    * *Solution:* `Hairballs::Theme`s.
+* Installing and using new Rubies then running IRB meant I had to exit out and
+  manually install them all.
+    * zzzzzzzz...
+    * *Solution:* `Hairballs::Helpers#libraries` and
+      `Hairballs::Helpers#require_libraries`.
+* I kept having problems with IRB and history getting all out of order--usually
+  with Rails.  I was using `'irb/history'`, but trying to figure out what was
+  wrong was difficult since my .irbrc had become a sprawling mass of one-off
+  methods and blocks.
+    * *Solution:* `hairballs/plugins/irb_history`.  This sets up IRB to use its
+      `*HISTORY*` settings properly and cleanly.
+* Specifying gems as IRB dependencies for different Ruby interpreters is simple
+  but can clutter up your .irbrc.
+    * Putting the deps with the plugin or theme that needs them keeps everything
+      together and out of the .irbrc.
+    * *Solution:* *Themes* and *Plugins* let you specify only the gems you need
+      for those items.  Logic surrounding that (ex. platform-specific) is kept
+      out of your .irbrc.
 
 Contributing
 ------------
