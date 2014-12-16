@@ -7,10 +7,10 @@ Gem::Specification.new do |spec|
   spec.name          = 'hairballs'
   spec.version       = Hairballs::VERSION
   spec.authors       = ['Steve Loveless']
-  spec.email         = ['steve@agrian.com']
-  spec.summary       = 'TODO: Write a short summary. Required.'
-  spec.description   = 'TODO: Write a longer description. Optional.'
-  spec.homepage      = ''
+  spec.email         = ['steve.loveless@gmail.com']
+  spec.summary       = 'Like oh-my-zsh, but for IRB.'
+  spec.description   = 'Some tools for making customizing your IRB sessions a little easier.'
+  spec.homepage      = 'https://github.com/turboladen/hairballs'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0")
