@@ -48,8 +48,8 @@ class Hairballs
     # Everything in the +block+ given here will be the last code to get
     # evaluated when #load! is called.  This is where you define code that makes
     # up your plugin.
-    def when_used(&block)
-      @when_used = block
+    def on_load(&block)
+      @on_load = block
     end
 
     # Loads the plugin using the +attributes+ values.  The keys in +attributes+
@@ -62,7 +62,7 @@ class Hairballs
       end
 
       require_libraries
-      @when_used.call
+      @on_load.call
     end
   end
 end

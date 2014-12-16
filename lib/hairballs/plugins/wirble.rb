@@ -4,7 +4,7 @@ require_relative '../../hairballs'
 Hairballs.add_plugin(:wirble) do |plugin|
   plugin.libraries %w(wirble)
 
-  plugin.when_used do
+  plugin.on_load do
     Wirble.init
     Wirble.colorize
   end

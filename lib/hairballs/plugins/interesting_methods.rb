@@ -4,7 +4,7 @@ require_relative '../../hairballs'
 #
 # @see http://stackoverflow.com/a/873371/172106
 Hairballs.add_plugin(:interesting_methods) do |plugin|
-  plugin.when_used do
+  plugin.on_load do
     Object.class_eval do
       # @return [Array<Symbol>]
       def interesting_methods
