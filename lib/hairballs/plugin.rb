@@ -62,7 +62,14 @@ class Hairballs
       end
 
       require_libraries
-      @on_load.call
+
+      if @on_load
+        if @on_load.kind_of?(Proc)
+          @on_load.call
+        else
+          fail PluginLoadFailure, self.name
+        end
+      end
     end
   end
 end
