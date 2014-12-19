@@ -78,7 +78,7 @@ class Hairballs
     # @param plugin_name [Symbol]
     def load_plugin(plugin_name, **options)
       plugin_to_use = plugins.find { |plugin| plugin.name == plugin_name }
-      fail PluginLoadFailure.new(plugin_name) unless plugin_to_use
+      fail PluginNotFound.new(plugin_name) unless plugin_to_use
       vputs "Using plugin: #{plugin_name}"
 
       plugin_to_use.load!(options)
