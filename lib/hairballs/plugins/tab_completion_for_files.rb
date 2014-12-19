@@ -11,23 +11,19 @@ require_relative '../../hairballs'
 #
 Hairballs.add_plugin(:tab_completion_for_files) do |plugin|
   plugin.on_load do
-    files_proc = proc do |string|
+    Hairballs.completion_procs << proc do |string|
       Dir['*'].grep(/^#{Regexp.escape(string)}*/)
     end
 
-    # Hairballs.completion_proc
-    completion_proc =
-      if defined? ::IRB::InputCompletor::CompletionProc
-        irb_proc = ::IRB::InputCompletor::CompletionProc
+    if defined? ::IRB::InputCompletor::CompletionProc
+      Hairballs.completion_procs << ::IRB::InputCompletor::CompletionProc
+    end
 
-        Proc.new do |string|
-          files = files_proc.call(string) || []
-          irb_things = irb_proc.call(string) || []
-          files | irb_things
-        end
-      else
-        files_proc
-      end
+    completion_proc = Proc.new do |string|
+      Hairballs.completion_procs.map do |proc|
+        proc.call(string)
+      end.flatten.uniq
+    end
 
     if Readline.respond_to?('basic_word_break_characters=')
       Readline.basic_word_break_characters= " \"'\t\n`><=;|&{("
