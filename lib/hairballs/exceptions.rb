@@ -1,5 +1,5 @@
 class Hairballs
-  class PluginLoadFailure < RuntimeError
+  class PluginNotFound < RuntimeError
     def initialize(plugin_name)
       message = "Plugin not found: :#{plugin_name}."
       super(message)

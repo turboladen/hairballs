@@ -154,10 +154,10 @@ describe Hairballs do
     end
 
     context 'plugin_name does not represent an added plugin' do
-      it 'raises a PluginLoadFailure' do
+      it 'raises a PluginNotFound' do
         expect do
           described_class.load_plugin(:meow)
-        end.to raise_exception(Hairballs::PluginLoadFailure)
+        end.to raise_exception(Hairballs::PluginNotFound)
       end
     end
   end
