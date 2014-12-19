@@ -100,5 +100,14 @@ class Hairballs
     def rails?
       ENV.has_key?('RAILS_ENV') || !!defined?(Rails)
     end
+
+    # Used for maintaining all possible completion Procs, thus allowing many
+    # different plugins to define a Proc for completion without overriding Procs
+    # defined for other plugins.
+    #
+    # @return [Array<Proc>]
+    def completion_procs
+      @completion_procs ||= []
+    end
   end
 end
