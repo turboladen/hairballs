@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Steve Loveless']
   spec.email         = ['steve.loveless@gmail.com']
   spec.summary       = 'Like oh-my-zsh, but for IRB.'
-  spec.description   = 'Some tools for making customizing your IRB sessions a little easier.'
+  spec.description   = spec.summary
   spec.homepage      = 'https://github.com/turboladen/hairballs'
   spec.license       = 'MIT'
 
