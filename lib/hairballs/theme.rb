@@ -97,7 +97,6 @@ class Hairballs
     end
 
     def set_up_pry_printer
-      puts "@pompt return format: #{@prompt.return_format}"
       if @prompt.return_format
         Pry.config.print = proc do |output, value|
           output.printf @prompt.return_format, value.inspect
