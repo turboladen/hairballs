@@ -9,10 +9,13 @@ require_relative '../../hairballs'
 #     # Will complete like this...
 #     irb> File.read("README.md"
 #
-Hairballs.add_plugin(:tab_completion_for_files) do |plugin|
+# The +completion_append_character+ is really a Readline option that tells it
+# what to do when you tab-complete a term. It's set to not add anything to the
+# completed term, but you may find it suits you better to append a single space.
+Hairballs.add_plugin(:tab_completion_for_files, completion_append_character: nil) do |plugin|
   plugin.on_load do
     Hairballs.completion_procs << proc do |string|
-      Dir['*'].grep(/^#{Regexp.escape(string)}*/)
+      Dir[string + '*'].grep(/^#{Regexp.escape(string)}/)
     end
 
     if defined? ::IRB::InputCompletor::CompletionProc
@@ -25,11 +28,12 @@ Hairballs.add_plugin(:tab_completion_for_files) do |plugin|
       end.flatten.uniq
     end
 
-    if Readline.respond_to?('basic_word_break_characters=')
-      Readline.basic_word_break_characters= " \"'\t\n`><=;|&{("
+    if Readline.respond_to?(:basic_word_break_characters=)
+      original_breaks = Readline.basic_word_break_characters
+      Readline.basic_word_break_characters = " \"'#{original_breaks}"
     end
 
-    Readline.completion_append_character = nil
+    Readline.completion_append_character = plugin.completion_append_character
     Readline.completion_proc = completion_proc
   end
 end
