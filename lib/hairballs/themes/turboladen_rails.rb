@@ -1,14 +1,14 @@
-require_relative '../../hairballs'
+require 'hairballs'
 
 Hairballs.add_theme(:turboladen_rails) do |theme|
-  theme.libraries do
-    libs_to_require = %w(
+  theme.libraries do |libs_to_require|
+    libs_to_require += %w(
       irb/completion
       looksee
       colorize
     )
 
-    libs_to_require +
+    libs_to_require +=
       case RUBY_PLATFORM
       when /mswin32|mingw32/
         %w(win32console)

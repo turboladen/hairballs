@@ -1,4 +1,4 @@
-require_relative '../../hairballs'
+require 'hairballs'
 
 # Just loads Wirble.
 Hairballs.add_plugin(:wirble) do |plugin|

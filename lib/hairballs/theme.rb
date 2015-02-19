@@ -1,5 +1,5 @@
-require_relative 'library_helpers'
-require_relative 'prompt'
+require 'hairballs/library_helpers'
+require 'hairballs/prompt'
 
 class Hairballs
   # Themes primarily provide a means for customizing the look of your IRB

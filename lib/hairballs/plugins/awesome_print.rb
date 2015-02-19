@@ -1,4 +1,4 @@
-require_relative '../../hairballs'
+require 'hairballs'
 
 Hairballs.add_plugin(:awesome_print) do |plugin|
   plugin.libraries %w(awesome_print)

@@ -1,4 +1,4 @@
-require_relative '../../hairballs'
+require 'hairballs'
 
 # When any value is returned by evaluating some Ruby, this will check if it is
 # JSON (by parsing it).  If it's JSON-like, it will get formatted prettily and
