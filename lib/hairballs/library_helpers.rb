@@ -17,7 +17,6 @@ class Hairballs
     # Requires #libraries on load.  If they're not installed, install them.  If
     # it can't be installed, move on to the next.
     def require_libraries
-      puts "in require libraries. libraries: #{@libraries}"
       return if @libraries.nil?
 
       @libraries.each do |lib|
