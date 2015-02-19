@@ -1,4 +1,4 @@
-require_relative '../../hairballs'
+require 'hairballs'
 
 # Directly lifted from rbates/dotfiles!  Adds +#ri+ to all Objects, letting you
 # get ri docs from within your IRB session.

@@ -1,4 +1,4 @@
-require_relative '../../hairballs'
+require 'hairballs'
 
 # Adds the Object#require_project_lib method as a shortcut for
 #

@@ -1,4 +1,4 @@
-require_relative '../../hairballs'
+require 'hairballs'
 
 # Adds the ability to tab-complete files that are in the current directory.
 #

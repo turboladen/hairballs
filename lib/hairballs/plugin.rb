@@ -1,4 +1,4 @@
-require_relative 'library_helpers'
+require 'hairballs/library_helpers'
 
 class Hairballs
   # Plugins provide means for adding functionality to your IRB sessions.  They

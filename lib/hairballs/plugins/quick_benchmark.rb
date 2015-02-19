@@ -1,4 +1,4 @@
-require_relative '../../hairballs'
+require 'hairballs'
 
 # Quick and dirty benchmarking of whatever block you pass to the method.
 #
