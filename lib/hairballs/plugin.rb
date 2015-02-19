@@ -1,3 +1,4 @@
+require 'hairballs/exceptions'
 require 'hairballs/library_helpers'
 
 class Hairballs
@@ -63,12 +64,12 @@ class Hairballs
 
       require_libraries
 
-      if @on_load
-        if @on_load.kind_of?(Proc)
-          @on_load.call
-        else
-          fail PluginLoadFailure, self.name
-        end
+      return unless @on_load
+
+      if @on_load.kind_of?(Proc)
+        @on_load.call
+      else
+        fail PluginLoadFailure, self.name
       end
     end
   end
