@@ -10,7 +10,7 @@ class Hairballs
   # +Hairballs.add_theme()+ and +Hairballs.use_theme()+ should cover most use
   # cases.
   class Theme
-    include LibraryHelpers
+    include Hairballs::LibraryHelpers
 
     # Just an identifier for the Theme.  Don't name two themes the same
     # name--that will cause problems.
