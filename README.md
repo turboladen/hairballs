@@ -105,10 +105,10 @@ end
 ```ruby
 # hairballs/themes/turboladen_rails.rb
 Hairballs.add_theme(:turboladen_rails) do |theme|
-  theme.libraries do
-    libs_to_require = %w(irb/completion looksee wirble awesome_print)
+  theme.libraries do |libs|
+    libs += %w(irb/completion looksee wirble awesome_print)
 
-    libs_to_require +
+    libs +=
       case RUBY_PLATFORM
       when /mswin32|mingw32/
         %w(win32console)
