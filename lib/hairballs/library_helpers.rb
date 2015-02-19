@@ -1,3 +1,5 @@
+require 'hairballs/ext/kernel_vputs'
+
 class Hairballs
   # Helpers specifying and requiring dependencies for Themes and Plugins.
   module LibraryHelpers
@@ -5,19 +7,17 @@ class Hairballs
     def libraries(libs=nil)
       return @libraries if @libraries && libs.nil?
 
-      @libraries = block_given? ? yield : libs
-
-      unless @libraries.is_a?(Array)
-        fail ArgumentError,
-          "Block must return an Array but returned #{@libraries}."
+      @libraries = if libs
+        libs
+      else
+        yield([])
       end
-
-      @libraries
     end
 
     # Requires #libraries on load.  If they're not installed, install them.  If
     # it can't be installed, move on to the next.
     def require_libraries
+      puts "in require libraries. libraries: #{@libraries}"
       return if @libraries.nil?
 
       @libraries.each do |lib|
@@ -43,10 +43,14 @@ class Hairballs
       end
     end
 
+    # Path to the highest version of the gem with the given gem.
+    #
+    # @param [String] gem_name
+    # @return [String]
     def find_latest_gem(gem_name)
       the_gem = Dir.glob("#{Gem.dir}/gems/#{gem_name}-*")
 
-      the_gem.empty? ? nil : the_gem.first
+      the_gem.empty? ? nil : the_gem.sort.last
     end
 
     # Add all gems in the global gemset to the $LOAD_PATH so they can be used
