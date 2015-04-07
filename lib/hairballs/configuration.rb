@@ -35,9 +35,6 @@ class Hairballs
     # @return [String]
     attr_reader :project_name
 
-    # @return [String]
-    attr_reader :project_root
-
     def initialize
       @themes = []
       @current_theme = nil
@@ -53,24 +50,27 @@ class Hairballs
       Hairballs::VERSION
     end
 
-    # Is IRB getting loaded for a rails console?
+    # Is IRB getting loaded for a Rails console?
     #
     # @return [Boolean]
     def rails?
       ENV.has_key?('RAILS_ENV') || !!defined?(Rails)
     end
 
-    # Name of the relative directory.
+    # Name of the project, if it can be determined. If not, defaults to "irb".
     #
     # @return [String]
     def project_name
-      @project_name ||= File.basename(project_root)
+      @project_name ||= project_root ? project_root.basename : nil
     end
 
+    # @return [Pathname]
     def project_root
       @project_root ||= find_project_root
     end
 
+    # @param [String] path
+    # @return [Boolean]
     def project_root?(path)
       File.expand_path(path) == project_root
     end
@@ -137,6 +137,7 @@ class Hairballs
 
     private
 
+    # @return [Pathname]
     def find_project_root
       if rails?
         ::Rails.root
@@ -145,12 +146,15 @@ class Hairballs
       end
     end
 
+    # @return [Pathname, nil]
     def root_by_git
       _stdin, stdout, _stderr = Open3.popen3('git rev-parse --show-toplevel')
-
-      stdout.gets.strip
+      result = stdout.gets
+      
+      result.nil? ? nil : Pathname.new(result.strip)
     end
 
+    # @return [Pathname, nil]
     def root_by_lib_dir
       cwd = Pathname.new(Dir.pwd)
       root = nil
@@ -159,7 +163,7 @@ class Hairballs
         lib_dir = File.join(dir.to_s, 'lib')
 
         if dir.children.find { |c| c.to_s =~ /#{lib_dir}/ && File.exist?(lib_dir) }
-          root = dir.to_s
+          root = Pathname.new(dir.to_s)
           break
         end
       end
