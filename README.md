@@ -185,7 +185,7 @@ Check out the Hairballs::Plugin docs and existing plugins under
 lib/hairballs/plugins/ for more details and ideas.
 
 I've got my `.irbrc` (using Hairballs) stored on the interwebs
-[here](https://github.com/turboladen/config_files/blob/master/.irbrc) if
+[here](https://github.com/turboladen/config_files/blob/master/ruby/irbrc) if
 that's of any help or interest.
 
 But whyyyy?
