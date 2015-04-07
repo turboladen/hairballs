@@ -7,8 +7,12 @@ Hairballs.add_plugin(:irb_history, save_history: 1000, eval_history: 20, global_
     IRB.conf[:SAVE_HISTORY] = plugin.save_history
     IRB.conf[:EVAL_HISTORY] = plugin.eval_history
 
-    unless plugin.global_history_file
-      IRB.conf[:HISTORY_FILE] = "#{Dir.home}/.irb_history-#{Hairballs.project_name}"
+    unless plugin.global_history_file && Hairballs.project_name
+      IRB.conf[:HISTORY_FILE] = "#{Dir.home}/.irb_history"
+
+      if Hairballs.project_name
+        IRB.conf[:HISTORY_FILE] << Hairballs.project_name.to_s
+      end
     end
 
     Object.class_eval do
