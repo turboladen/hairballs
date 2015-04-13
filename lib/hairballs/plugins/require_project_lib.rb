@@ -9,7 +9,7 @@ Hairballs.add_plugin(:require_project_lib) do |plugin|
   plugin.on_load do
     Object.class_eval do
       def require_project_lib
-        require_dir = File.join(*Hairballs.project_name.split('-'))
+        require_dir = File.join(*Hairballs.project_name.to_s.split('-'))
         require_relative "#{Dir.pwd}/lib/#{require_dir}"
       end
     end

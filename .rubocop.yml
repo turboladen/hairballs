@@ -1,0 +1,5 @@
+Metrics/MethodLength:
+  Max: 20
+
+Style/SpaceAroundEqualsInParameterDefault:
+  Enabled: false
