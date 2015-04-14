@@ -166,24 +166,37 @@ RSpec.describe Hairballs::Configuration do
   end
 
   describe '.project_name' do
-    it 'is a Pathname with path "hairballs"' do
-      expect(config.project_name).to be_instance_of(Pathname)
-      expect(config.project_name.to_s).to eq 'hairballs'
-    end
-  end
+    context '#project_root exists' do
+      let(:project_root) { Pathname.new('meow') }
 
-  describe '.project_root' do
-    before do
-      allow(Dir).to receive(:pwd).and_return '/meow/hairballs'
+      before do
+        expect(subject).to receive(:project_root).and_return(project_root).
+          exactly(2).times
+      end
+
+      it 'is "hairballs"' do
+        expect(config.project_name).to eq 'meow'
+      end
     end
 
-    subject { config.project_name }
+    context '#project_root does not exist' do
+      before { expect(subject).to receive(:project_root).and_return(nil) }
+
+      it 'is nil' do
+        expect(config.project_name).to be_nil
+      end
+    end
   end
 
   describe '.rails?' do
     subject { config.rails? }
 
     context 'not using Rails' do
+      before do
+        ENV.delete('RAILS_ENV')
+        Object.send(:remove_const, :Rails) if Kernel.const_defined? :Rails
+      end
+
       it { is_expected.to eq false }
     end
 

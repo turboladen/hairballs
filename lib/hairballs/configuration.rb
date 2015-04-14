@@ -63,7 +63,7 @@ class Hairballs
     #
     # @return [String]
     def project_name
-      @project_name ||= project_root ? project_root.basename : nil
+      @project_name ||= project_root ? project_root.basename.to_s : nil
     end
 
     # @return [Pathname]

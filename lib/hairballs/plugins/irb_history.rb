@@ -13,7 +13,7 @@ Hairballs.add_plugin(:irb_history, save_history: 1000,
       IRB.conf[:HISTORY_FILE] = "#{Dir.home}/.irb_history"
 
       if Hairballs.project_name
-        IRB.conf[:HISTORY_FILE] << Hairballs.project_name.to_s
+        IRB.conf[:HISTORY_FILE] << Hairballs.project_name
       end
     end
 
