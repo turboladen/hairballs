@@ -1,6 +1,8 @@
 require 'hairballs'
 
-Hairballs.add_plugin(:irb_history, save_history: 1000, eval_history: 20, global_history_file: true) do |plugin|
+Hairballs.add_plugin(:irb_history, save_history: 1000,
+                                   eval_history: 20,
+                                   global_history_file: true) do |plugin|
   plugin.libraries %w(irb/ext/save-history)
 
   plugin.on_load do

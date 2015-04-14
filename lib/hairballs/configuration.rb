@@ -8,6 +8,8 @@ require 'hairballs/plugin'
 require 'hairballs/version'
 
 class Hairballs
+  # The base-level +Hairballs+ class maintains an object of this type, which
+  # contains the current configuration.
   class Configuration
     # @return [Array<Hairballs::Theme>]
     attr_reader :themes
@@ -54,7 +56,7 @@ class Hairballs
     #
     # @return [Boolean]
     def rails?
-      ENV.has_key?('RAILS_ENV') || !!defined?(Rails)
+      ENV.key?('RAILS_ENV') || Kernel.const_defined?(:Rails)
     end
 
     # Name of the project, if it can be determined. If not, defaults to "irb".
@@ -96,7 +98,7 @@ class Hairballs
     # @param [Symbol] theme_name The name of the Theme to use/switch to.
     def use_theme(theme_name)
       switch_to = themes.find { |theme| theme.name == theme_name }
-      fail ThemeUseFailure.new(theme_name) unless switch_to
+      fail ThemeUseFailure, theme_name unless switch_to
       vputs "Switched to theme: #{theme_name}"
 
       switch_to.use!
@@ -126,7 +128,7 @@ class Hairballs
     # @param plugin_name [Symbol]
     def load_plugin(plugin_name, **options)
       plugin_to_use = plugins.find { |plugin| plugin.name == plugin_name }
-      fail PluginNotFound.new(plugin_name) unless plugin_to_use
+      fail PluginNotFound, plugin_name unless plugin_to_use
       vputs "Using plugin: #{plugin_name}"
 
       plugin_to_use.load!(options)
@@ -150,7 +152,7 @@ class Hairballs
     def root_by_git
       _stdin, stdout, _stderr = Open3.popen3('git rev-parse --show-toplevel')
       result = stdout.gets
-      
+
       result.nil? ? nil : Pathname.new(result.strip)
     end
 
@@ -162,7 +164,11 @@ class Hairballs
       cwd.ascend do |dir|
         lib_dir = File.join(dir.to_s, 'lib')
 
-        if dir.children.find { |c| c.to_s =~ /#{lib_dir}/ && File.exist?(lib_dir) }
+        child = dir.children.find do |c|
+          c.to_s =~ /#{lib_dir}/ && File.exist?(lib_dir)
+        end
+
+        if child
           root = Pathname.new(dir.to_s)
           break
         end

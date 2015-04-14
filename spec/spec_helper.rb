@@ -1,4 +1,4 @@
-$:.unshift(File.expand_path('../lib/hairballs', File.dirname(__FILE__)))
+$LOAD_PATH.unshift(File.expand_path('../lib/hairballs', File.dirname(__FILE__)))
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -19,8 +19,8 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
-# The settings below are suggested to provide a good initial experience
-# with RSpec, but feel free to customize to your heart's content.
+  # The settings below are suggested to provide a good initial experience
+  # with RSpec, but feel free to customize to your heart's content.
   # These two settings work together to allow you to limit a spec run
   # to individual examples or groups you care about by tagging them with
   # `:focus` metadata. When nothing is tagged with `:focus`, all examples
@@ -28,8 +28,8 @@ RSpec.configure do |config|
   # config.filter_run :focus
   # config.run_all_when_everything_filtered = true
 
-  # Limits the available syntax to the non-monkey patched syntax that is recommended.
-  # For more details, see:
+  # Limits the available syntax to the non-monkey patched syntax that is
+  # recommended. For more details, see:
   #   - http://myronmars.to/n/dev-blog/2012/06/rspecs-new-expectation-syntax
   #   - http://teaisaweso.me/blog/2013/05/27/rspecs-new-message-expectation-syntax/
   #   - http://myronmars.to/n/dev-blog/2014/05/notable-changes-in-rspec-3#new__config_option_to_disable_rspeccore_monkey_patching

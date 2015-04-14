@@ -17,6 +17,8 @@ Hairballs.add_theme(:turboladen_rails) do |theme|
       else
         []
       end
+
+    libs_to_require
   end
 
   theme.extend_bundler = true

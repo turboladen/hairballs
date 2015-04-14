@@ -1,3 +1,4 @@
+# Adding #vputs.
 module Kernel
   # Does a puts only if IRB is in verbose mode.
   def vputs(*messages)

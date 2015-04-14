@@ -17,6 +17,8 @@ Hairballs.add_theme(:turboladen) do |theme|
       else
         []
       end
+
+    libs_to_require
   end
 
   theme.prompt do |prompt|

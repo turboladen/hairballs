@@ -97,7 +97,8 @@ RSpec.describe Hairballs::Configuration do
 
     context 'block given and name param is a Symbol' do
       before do
-        expect(Hairballs::Plugin).to receive(:new).with(:test, {}).and_return plugin
+        expect(Hairballs::Plugin).to receive(:new).with(:test, {}).
+          and_return plugin
       end
 
       it 'yields the Plugin' do
@@ -165,8 +166,10 @@ RSpec.describe Hairballs::Configuration do
   end
 
   describe '.project_name' do
-    subject { config.project_name }
-    it { is_expected.to eq 'hairballs' }
+    it 'is a Pathname with path "hairballs"' do
+      expect(config.project_name).to be_instance_of(Pathname)
+      expect(config.project_name.to_s).to eq 'hairballs'
+    end
   end
 
   describe '.project_root' do
