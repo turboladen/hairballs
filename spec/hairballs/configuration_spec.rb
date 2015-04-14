@@ -174,7 +174,7 @@ RSpec.describe Hairballs::Configuration do
           exactly(2).times
       end
 
-      it 'is "hairballs"' do
+      it 'is the name of the project root' do
         expect(config.project_name).to eq 'meow'
       end
     end
