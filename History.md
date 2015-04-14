@@ -1,3 +1,15 @@
+### 0.1.2 / 2015-04-13
+
+* Improvements
+    * Used Rubocop for static analysis and clean-up.
+    * Started running tests on travis-ci.
+* Bug Fixes
+    * [#4](https://github.com/turboladen/hairballs/issues/4) Fixed installing of
+      missing plugin/theme dependencies.
+    * [#5](https://github.com/turboladen/hairballs/issues/5) Fixed bad use of
+      `Hairballs.project_name` everywhere.
+    * Fixed bad link to my .irbrc in the README.
+
 ### 0.1.1 / 2015-04-06
 
 * Bug Fixes
