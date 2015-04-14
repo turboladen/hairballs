@@ -22,10 +22,10 @@ RSpec.describe Hairballs::Plugin do
     let(:the_block) { proc { puts 'hi' } }
 
     it 'stores the given block' do
-      expect {
+      expect do
         subject.on_load(&the_block)
-      }.to change { subject.instance_variable_get(:@on_load) }.
-      from(nil).to(the_block)
+      end.to change { subject.instance_variable_get(:@on_load) }.
+        from(nil).to(the_block)
     end
   end
 
@@ -51,7 +51,7 @@ RSpec.describe Hairballs::Plugin do
     end
 
     context 'with @on_load set to a Proc' do
-      let(:on_load) { double 'Proc', :kind_of? => true }
+      let(:on_load) { double 'Proc', kind_of?: true }
       before { subject.instance_variable_set(:@on_load, on_load) }
 
       it 'calls the on_load Proc' do
@@ -61,7 +61,7 @@ RSpec.describe Hairballs::Plugin do
     end
 
     context 'with @on_load set to not a Proc' do
-      let(:on_load) { double 'Proc', :kind_of? => false }
+      let(:on_load) { double 'Proc', kind_of?: false }
       before { subject.instance_variable_set(:@on_load, on_load) }
 
       it 'raises a PluginLoadFailure' do

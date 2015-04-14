@@ -12,7 +12,8 @@ require 'hairballs'
 # The +completion_append_character+ is really a Readline option that tells it
 # what to do when you tab-complete a term. It's set to not add anything to the
 # completed term, but you may find it suits you better to append a single space.
-Hairballs.add_plugin(:tab_completion_for_files, completion_append_character: nil) do |plugin|
+Hairballs.add_plugin(:tab_completion_for_files,
+                     completion_append_character: nil) do |plugin|
   plugin.on_load do
     Hairballs.completion_procs << proc do |string|
       Dir[string + '*'].grep(/^#{Regexp.escape(string)}/)
@@ -22,7 +23,7 @@ Hairballs.add_plugin(:tab_completion_for_files, completion_append_character: nil
       Hairballs.completion_procs << ::IRB::InputCompletor::CompletionProc
     end
 
-    completion_proc = Proc.new do |string|
+    completion_proc = proc do |string|
       Hairballs.completion_procs.map do |proc|
         proc.call(string)
       end.flatten.uniq

@@ -17,12 +17,14 @@ Hairballs.add_theme(:turboladen) do |theme|
       else
         []
       end
+
+    libs_to_require
   end
 
   theme.prompt do |prompt|
     preface = proc do |status = '  '|
       if Hairballs.project_name
-        "⟪#{Hairballs.project_name.to_s.light_blue}⟫#{status}%03n"
+        "⟪#{Hairballs.project_name.light_blue}⟫#{status}%03n"
       else
         "❨#{'irb'.light_blue}❩#{status}%03n"
       end

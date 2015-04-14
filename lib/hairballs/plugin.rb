@@ -7,13 +7,13 @@ class Hairballs
   # be.
   #
   # One benefit of making a simple plugin for requiring other deps is
-  # Hairballs::LibraryHelpers#require_libraries method.  When used in conjunction with
-  # Hairballs::LibraryHelpers#libraries, you don't have to worry about installing the
-  # gems before using IRB.  This is particularly helpful when using a Ruby
-  # manager (RVM, rbenv, etc) and you install a new Ruby; if you don't think
-  # ahead to install your IRB deps, your IRB session won't behave like you
-  # want; well, not until you `exit` and fix the problem.  This simple pattern
-  # helps alleviate that small headache.
+  # Hairballs::LibraryHelpers#require_libraries method. When used in
+  # conjunction with Hairballs::LibraryHelpers#libraries, you don't have to
+  # worry about installing the gems before using IRB. This is particularly
+  # helpful when using a Ruby manager (RVM, rbenv, etc) and you install a new
+  # Ruby; if you don't think ahead to install your IRB deps, your IRB session
+  # won't behave like you want; well, not until you `exit` and fix the problem.
+  # This simple pattern helps alleviate that small headache.
   #
   # Next, Hairballs Plugins are lazily loaded; `require`ing their source files
   # doesn't mean the methods and such that you add there will do anything; it's
@@ -69,7 +69,7 @@ class Hairballs
       if @on_load.kind_of?(Proc)
         @on_load.call
       else
-        fail PluginLoadFailure, self.name
+        fail PluginLoadFailure, name
       end
     end
   end
