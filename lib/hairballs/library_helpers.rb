@@ -8,10 +8,10 @@ class Hairballs
       return @libraries if @libraries && libs.nil?
 
       @libraries = if libs
-        libs
-      else
-        yield([])
-      end
+                     libs
+                   else
+                     yield([])
+                   end
     end
 
     # Requires #libraries on load.  If they're not installed, install them.  If
@@ -19,25 +19,18 @@ class Hairballs
     def require_libraries
       return if @libraries.nil?
 
-      @libraries.each do |lib|
-        retry_count = 0
+      install_threads = []
+      require_threads = []
+      require_queue = Queue.new
 
+      @libraries.each do |lib|
         begin
-          next if retry_count == 2
           vputs "Requiring library: #{lib}"
           require lib
         rescue LoadError
           puts "#{lib} not installed; installing now..."
-          Gem.install lib
-
-          if Hairballs.rails?
-            installed_gem = find_latest_gem(lib)
-            $LOAD_PATH.unshift("#{installed_gem}/lib")
-          end
-
-          require lib
-          retry_count += 1
-          retry
+          install_threads << start_install_thread(lib, require_queue)
+          require_threads << start_require_thread(require_queue)
         end
       end
     end
@@ -45,7 +38,7 @@ class Hairballs
     # Path to the highest version of the gem with the given gem.
     #
     # @param [String] gem_name
-    # @return [String]
+    # @return [String] The path to the latest install of +gem_name+.
     def find_latest_gem(gem_name)
       the_gem = Dir.glob("#{Gem.dir}/gems/#{gem_name}-*")
 
@@ -83,6 +76,43 @@ class Hairballs
       else
         vputs 'Bundler not defined.  Skipping.'
       end
+    end
+
+    #--------------------------------------------------------------------------
+    # Privates
+    #--------------------------------------------------------------------------
+
+    private
+
+    # @param [String] lib Gem to install.
+    # @param [Queue] require_queue Queue to push library names onto so the
+    #   require thread can do its requiring.
+    # @return [Thread]
+    def start_install_thread(lib, require_queue)
+      Thread.new do
+        result = Gem.install(lib)
+
+        if result.empty?
+          puts "Unable to install gem '#{lib}'. Moving on..."
+        else
+          require_queue << lib
+        end
+      end
+    end
+
+    # @param [Queue] require_queue
+    # @return [Thread]
+    def start_require_thread(require_queue)
+      Thread.new do
+        lib = require_queue.pop
+
+        if Hairballs.config.rails?
+          installed_gem = find_latest_gem(lib)
+          $LOAD_PATH.unshift("#{installed_gem}/lib")
+        end
+
+        require lib
+      end.join
     end
   end
 end
