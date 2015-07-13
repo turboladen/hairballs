@@ -1,6 +1,8 @@
 hairballs
 =========
 
+[![Build Status](https://travis-ci.org/turboladen/hairballs.svg?branch=develop)](https://travis-ci.org/turboladen/hairballs)
+
 Aka, "haIRBalls".  Like [oh-my-zsh](http://ohmyz.sh), but for IRB.
 
 wat
