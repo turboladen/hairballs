@@ -8,14 +8,13 @@ Hairballs.add_plugin(:interesting_methods) do |plugin|
     Object.class_eval do
       # @return [Array<Symbol>]
       def interesting_methods
-        case self.class
-        when Class
-          public_methods.sort - Object.public_methods
-        when Module
-          public_methods.sort - Module.public_methods
-        else
-          public_methods.sort - Object.new.public_methods
-        end
+        other_methods = case self.class
+                        when Class then Object.public_methods
+                        when Module then Module.public_methods
+                        else Object.new.public_methods
+                        end
+
+        (public_methods.sort - other_methods).uniq
       end
     end
   end
