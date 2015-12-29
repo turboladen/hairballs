@@ -12,18 +12,20 @@ class Hairballs
   class Theme
     include Hairballs::LibraryHelpers
 
-    # Just an identifier for the Theme.  Don't name two themes the same
-    # name--that will cause problems.
+    # @!attribute name [rw]
+    #   Just an identifier for the Theme.  Don't name two themes the same
+    #   name--that will cause problems.
     #
-    # @param [Symbol]
+    #   @return [Symbol]
     attr_accessor :name
 
-    # Tells Hairballs to do some hackery to let Themes use gems that aren't
-    # specified in your app's Gemfile.  This alleviates you from having to
-    # declare gems in your Gemfile simply for the sake of managing your personal
-    # IRB preferences.
+    # @!attribute extend_bundler [rw]
+    #   Tells Hairballs to do some hackery to let Themes use gems that aren't
+    #   specified in your app's Gemfile.  This alleviates you from having to
+    #   declare gems in your Gemfile simply for the sake of managing your personal
+    #   IRB preferences.
     #
-    # @param [Boolean]
+    #   @return [Boolean]
     attr_accessor :extend_bundler
 
     # @param name [Symbol]
