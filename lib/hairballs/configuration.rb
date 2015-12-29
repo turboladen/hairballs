@@ -88,7 +88,7 @@ class Hairballs
       yield theme
 
       themes << theme
-      vputs "Added theme: #{name}"
+      vputs "[config] Added theme: #{name}"
 
       theme
     end
@@ -99,7 +99,7 @@ class Hairballs
     def use_theme(theme_name)
       switch_to = themes.find { |theme| theme.name == theme_name }
       fail ThemeUseFailure, theme_name unless switch_to
-      vputs "Switched to theme: #{theme_name}"
+      vputs "[config] Switched to theme: #{theme_name}"
 
       switch_to.use!
       @current_theme = switch_to
@@ -115,10 +115,11 @@ class Hairballs
     #   passed along the the Hairballs::Plugin object and are used as attributes
     #   of the plugin.
     def add_plugin(name, **options)
+      vputs "[config] Adding plugin: #{name}"
       plugin = Plugin.new(name, options)
       yield plugin
       plugins << plugin
-      vputs "Added plugin: #{name}"
+      vputs "[config] Added plugin: #{name}"
 
       plugin
     end
@@ -129,7 +130,7 @@ class Hairballs
     def load_plugin(plugin_name, **options)
       plugin_to_use = plugins.find { |plugin| plugin.name == plugin_name }
       fail PluginNotFound, plugin_name unless plugin_to_use
-      vputs "Using plugin: #{plugin_name}"
+      vputs "[config] Using plugin: #{plugin_name}"
 
       plugin_to_use.load!(options)
       loaded_plugins << plugin_to_use

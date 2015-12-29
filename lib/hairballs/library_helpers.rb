@@ -25,8 +25,9 @@ class Hairballs
 
       @libraries.each do |lib|
         begin
-          vputs "Requiring library: #{lib}"
+          vputs "[**:#{@name}](#{lib}) Requiring library..."
           require lib
+          vputs "[**:#{@name}](#{lib}) Successfully required library!"
         rescue LoadError
           puts "#{lib} not installed; installing now..."
           install_threads << start_install_thread(lib, require_queue)
@@ -51,14 +52,16 @@ class Hairballs
     # TODO: Use #find_latest_gem for each of #libraries.
     def do_bundler_extending
       if defined?(::Bundler)
+        vputs "[**:#{@name}] Libraries: #{@libraries}"
         all_global_gem_paths = Dir.glob("#{Gem.dir}/gems/*")
 
         all_global_gem_paths.each do |p|
           gem_path = "#{p}/lib"
+          vputs "[**:#{@name}] Adding to $LOAD_PATH: #{gem_path}"
           $LOAD_PATH.unshift(gem_path)
         end
       else
-        vputs 'Bundler not defined.  Skipping.'
+        vputs %[[**:#{@name}] Bundler not defined.  Skipping.]
       end
     end
 
@@ -74,7 +77,7 @@ class Hairballs
           $LOAD_PATH.delete(gem_path)
         end
       else
-        vputs 'Bundler not defined.  Skipping.'
+        vputs %[[**:#{@name}] Bundler not defined.  Skipping.]
       end
     end
 

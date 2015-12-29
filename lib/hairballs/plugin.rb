@@ -63,7 +63,9 @@ class Hairballs
       end
 
       if @libraries
+        vputs "[pl:#{@name}] Requiring libs..."
         require_libraries
+        vputs "[pl:#{@name}] Done requiring libs."
       end
 
       return unless @on_load

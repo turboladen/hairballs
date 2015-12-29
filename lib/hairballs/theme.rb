@@ -38,8 +38,10 @@ class Hairballs
     # Tell IRB to use this Theme.
     def use!
       do_bundler_extending if @extend_bundler
+      vputs "[th:#{@name}] Requiring libs..."
       require_libraries
       set_up_prompt
+      vputs "[th:#{@name}] Done setting up."
     end
 
     # The name of the Theme, but in the format that IRB.conf[:PROMPT] likes (an
@@ -81,7 +83,7 @@ class Hairballs
     end
 
     def set_up_irb_prompt
-      vputs "Prompt options: #{@prompt.irb_prompt_options}"
+      vputs "[th:#{@name}] Prompt options: #{@prompt.irb_prompt_options}"
       IRB.conf[:PROMPT][irb_name] = @prompt.irb_prompt_options
       IRB.conf[:PROMPT_MODE] = irb_name
       IRB.CurrentContext.prompt_mode = irb_name if IRB.CurrentContext
@@ -95,7 +97,7 @@ class Hairballs
       elsif @prompt.normal
         ::Pry.config.prompt = -> { @prompt.normal }
       else
-        vputs 'Neither "normal" nor "continued_statement" prompts configured.'
+        vputs %[[th:#{@name}] Neither "normal" nor "continued_statement" prompts configured.]
       end
     end
 
@@ -105,7 +107,7 @@ class Hairballs
           output.printf @prompt.return_format, value.inspect
         end
       else
-        vputs '"return_format" not configured.'
+        vputs %[[th:#{@name}] "return_format" not configured.]
       end
     end
   end
