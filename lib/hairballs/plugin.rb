@@ -62,7 +62,9 @@ class Hairballs
         send("#{k}=".to_sym, v)
       end
 
-      require_libraries
+      if @libraries
+        require_libraries
+      end
 
       return unless @on_load
 

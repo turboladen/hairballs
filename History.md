@@ -2,6 +2,10 @@
 
 ## [unreleased] / yyyy-mm-dd
 
+### Improvements
+
+* For `Plugin`s, only try to require libraries if some are given for the plugin.
+
 ### Bug Fixes
 
 * Removed `Prompt#auto_indent`; it never worked. To do auto-indenting, just use
