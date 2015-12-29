@@ -3,6 +3,7 @@ require 'hairballs'
 Hairballs.add_theme(:turboladen_rails) do |theme|
   theme.libraries do |libs_to_require|
     libs_to_require += %w(
+      awesome_print
       irb/completion
       looksee
       colorize
@@ -10,12 +11,9 @@ Hairballs.add_theme(:turboladen_rails) do |theme|
 
     libs_to_require +=
       case RUBY_PLATFORM
-      when /mswin32|mingw32/
-        %w(win32console)
-      when /darwin/
-        %w(terminal-notifier)
-      else
-        []
+      when /mswin32|mingw32/ then %w(win32console)
+      when /darwin/ then %w(terminal-notifier)
+      else []
       end
 
     libs_to_require
@@ -24,12 +22,11 @@ Hairballs.add_theme(:turboladen_rails) do |theme|
   theme.extend_bundler = true
 
   theme.prompt do |prompt|
-    prompt.auto_indent = true
-    preface = Hairballs.project_name.light_blue
-    prompt.normal = "#{preface}> "
+    preface = Hairballs.project_name.light_blue.freeze
+    prompt.normal = "#{preface}> ".freeze
     prompt.continued_string = "#{preface}#{'❊%l'.yellow}> "
     prompt.continued_statement = "#{preface}#{'⇥'.yellow} %i> "
     prompt.indented_code = "#{preface}#{'⇥'.yellow} %i> "
-    prompt.return_format = "➥ %s\n"
+    prompt.return_format = "➥ %s\n".freeze
   end
 end

@@ -1,5 +1,13 @@
 # Change Log
 
+## [unreleased] / yyyy-mm-dd
+
+### Bug Fixes
+
+* Removed `Prompt#auto_indent`; it never worked. To do auto-indenting, just use
+  `IRB.conf[:AUTO_INDENT]` directly.
+* Fixed incorrect uses of Yard.
+
 ## 0.1.3 / 2015-07-13
 
 ### Improvements

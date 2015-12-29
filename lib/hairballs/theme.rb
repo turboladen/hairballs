@@ -81,7 +81,8 @@ class Hairballs
     end
 
     def set_up_irb_prompt
-      IRB.conf[:PROMPT][irb_name] = @prompt.irb_configuration
+      vputs "Prompt options: #{@prompt.irb_prompt_options}"
+      IRB.conf[:PROMPT][irb_name] = @prompt.irb_prompt_options
       IRB.conf[:PROMPT_MODE] = irb_name
       IRB.CurrentContext.prompt_mode = irb_name if IRB.CurrentContext
     end
