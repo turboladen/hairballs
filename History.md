@@ -5,6 +5,7 @@
 ### Improvements
 
 * For `Plugin`s, only try to require libraries if some are given for the plugin.
+* Changed `quick_benchmark` default to 20 iterations (from 100).
 
 ### Bug Fixes
 

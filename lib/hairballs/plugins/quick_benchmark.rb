@@ -8,7 +8,7 @@ Hairballs.add_plugin(:quick_benchmark) do |plugin|
 
   plugin.on_load do
     Kernel.module_eval do
-      def quick_benchmark(repetitions=100, &block)
+      def quick_benchmark(repetitions=20, &block)
         Benchmark.bmbm do |b|
           b.report { repetitions.times(&block) }
         end
