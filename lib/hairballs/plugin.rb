@@ -69,12 +69,9 @@ class Hairballs
       end
 
       return unless @on_load
+      fail PluginLoadFailure, name unless @on_load.kind_of?(Proc)
 
-      if @on_load.kind_of?(Proc)
-        @on_load.call
-      else
-        fail PluginLoadFailure, name
-      end
+      @on_load.call
     end
   end
 end

@@ -4,17 +4,17 @@ Hairballs.add_theme(:turboladen) do |theme|
   IRB.conf[:AUTO_INDENT] = true
 
   theme.libraries do |libs_to_require|
-    libs_to_require += %w(
+    libs_to_require += %w[
       awesome_print
       irb/completion
       looksee
       colorize
-    )
+    ]
 
     libs_to_require +=
       case RUBY_PLATFORM
-      when /mswin32|mingw32/ then %w(win32console)
-      when /darwin/ then %w(terminal-notifier)
+      when /mswin32|mingw32/ then %w[win32console]
+      when /darwin/ then %w[terminal-notifier]
       else []
       end
 

@@ -22,8 +22,8 @@ class Hairballs
     # @!attribute extend_bundler [rw]
     #   Tells Hairballs to do some hackery to let Themes use gems that aren't
     #   specified in your app's Gemfile.  This alleviates you from having to
-    #   declare gems in your Gemfile simply for the sake of managing your personal
-    #   IRB preferences.
+    #   declare gems in your Gemfile simply for the sake of managing your
+    #   personal IRB preferences.
     #
     #   @return [Boolean]
     attr_accessor :extend_bundler
@@ -97,7 +97,9 @@ class Hairballs
       elsif @prompt.normal
         ::Pry.config.prompt = -> { @prompt.normal }
       else
-        vputs %[[th:#{@name}] Neither "normal" nor "continued_statement" prompts configured.]
+        # rubocop:disable Metrics/LineLength
+        vputs %([th:#{@name}] Neither "normal" nor "continued_statement" prompts configured.)
+        # rubocop:enable
       end
     end
 
@@ -107,7 +109,7 @@ class Hairballs
           output.printf @prompt.return_format, value.inspect
         end
       else
-        vputs %[[th:#{@name}] "return_format" not configured.]
+        vputs %([th:#{@name}] "return_format" not configured.)
       end
     end
   end
