@@ -122,6 +122,8 @@ class Hairballs
       vputs "[config] Added plugin: #{name}"
 
       plugin
+    rescue => ex
+      vputs "[config] Exception adding plugin: #{ex.class}: #{ex.message}\n#{ex.backtrace[0]}"
     end
 
     # Searches for the Hairballs::Plugin by the +plugin_name+, then loads it.
