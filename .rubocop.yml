@@ -16,6 +16,12 @@ Style/Documentation:
 Style/DotPosition:
   Enabled: false
 
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%i': '[]'
+    '%w': '[]'
+    '%W': '[]'
+
 Style/RescueModifier:
   Exclude:
     - lib/hairballs/plugins/colorize_json.rb

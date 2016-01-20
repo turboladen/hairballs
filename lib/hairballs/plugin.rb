@@ -62,15 +62,16 @@ class Hairballs
         send("#{k}=".to_sym, v)
       end
 
-      require_libraries
+      if @libraries
+        vputs "[pl:#{@name}] Requiring libs..."
+        require_libraries
+        vputs "[pl:#{@name}] Done requiring libs."
+      end
 
       return unless @on_load
+      fail PluginLoadFailure, name unless @on_load.kind_of?(Proc)
 
-      if @on_load.kind_of?(Proc)
-        @on_load.call
-      else
-        fail PluginLoadFailure, name
-      end
+      @on_load.call
     end
   end
 end

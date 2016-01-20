@@ -14,3 +14,7 @@
 mkmf.log
 
 tags
+
+*.gem
+
+.byebug_history

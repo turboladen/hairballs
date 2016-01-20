@@ -4,61 +4,81 @@ class Hairballs
   #
   # TODO: Make it nicer to define Pry prompts.
   class Prompt
-    # @param [Boolean]
-    attr_accessor :auto_indent
-
-    # The normal prompt string.  Same as
-    # IRB.conf[:PROMPT][ prompt name ][:PROMPT_I]
+    # @!attribute irb_prompt_options [r]
+    #   After setting values using the Prompt's setter methods, this Hash will
+    #   represent those values using keys that correlate to
+    #   IRB.conf[:PROMPT][:MY_PROMPT].
     #
-    # @param [String]
-    attr_accessor :normal
-    alias_method :i, :normal
-    alias_method :i=, :normal=
+    #   @return [Hash]
+    attr_reader :irb_prompt_options
 
-    # The prompt for when strings wrap multiple lines.  Same as
-    # IRB.conf[:PROMPT][ prompt name ][:PROMPT_S]
-    #
-    # @param [String]
-    attr_accessor :continued_string
-    alias_method :s, :continued_string
-    alias_method :s=, :continued_string=
-
-    # The prompt for when statements wrap multiple lines.  Same as
-    # IRB.conf[:PROMPT][ prompt name ][:PROMPT_C]
-    #
-    # @param [String]
-    attr_accessor :continued_statement
-    alias_method :c, :continued_statement
-    alias_method :c=, :continued_statement=
-
-    # The prompt for when statements include indentation.  Same as
-    # IRB.conf[:PROMPT][ prompt name ][:PROMPT_N]
-    #
-    # @param [String]
-    attr_accessor :indented_code
-    alias_method :n, :indented_code
-    alias_method :n=, :indented_code=
-
-    # The prompt for return values.  Same as
-    # IRB.conf[:PROMPT][ prompt name ][:RETURN]
-    #
-    # @param [String]
-    attr_accessor :return_format
-
-    # @return [Hash] A set of key/value pairs that can be used to pass to a
-    #   IRB.conf[:PROMPT][ prompt name ].
-    def irb_configuration
+    def initialize
       vputs 'Setting up prompt...'
+      @irb_prompt_options = IRB.conf[:PROMPT][:NULL].dup
+    end
 
-      prompt_values = {}
-      prompt_values[:AUTO_INDENT] = @auto_indent if @auto_indent
-      prompt_values[:PROMPT_C] = continued_statement unless continued_statement.empty?
-      prompt_values[:PROMPT_I] = normal unless normal.empty?
-      prompt_values[:PROMPT_N] = indented_code unless indented_code.empty?
-      prompt_values[:PROMPT_S] = continued_string unless continued_string.empty?
-      prompt_values[:RETURN] = @return_format if @return_format
+    # Wrapper for setting IRB.conf[:PROMPT][:MY_PROMPT][:PROMPT_C].
+    # The prompt for when statements wrap multiple lines.
+    #
+    # @param new_continued_statement [String]
+    def continued_statement=(new_continued_statement)
+      @irb_prompt_options[:PROMPT_C] = new_continued_statement
+    end
 
-      prompt_values
+    # @return [String]
+    def continued_statement
+      @irb_prompt_options[:PROMPT_C]
+    end
+
+    # Wrapper for setting IRB.conf[:PROMPT][:MY_PROMPT][:PROMPT_S].
+    # The prompt for when strings wrap multiple lines.
+    #
+    # @param new_continued_string [String]
+    def continued_string=(new_continued_string)
+      @irb_prompt_options[:PROMPT_S] = new_continued_string
+    end
+
+    # @return [String]
+    def continued_string
+      @irb_prompt_options[:PROMPT_S]
+    end
+
+    # Wrapper for setting IRB.conf[:PROMPT][:MY_PROMPT][:PROMPT_N].
+    # The prompt for when statements include indentation.
+    #
+    # @param new_indented_code [String]
+    def indented_code=(new_indented_code)
+      @irb_prompt_options[:PROMPT_N] = new_indented_code
+    end
+
+    # @return [String]
+    def indented_code
+      @irb_prompt_options[:PROMPT_N]
+    end
+
+    # Wrapper for setting IRB.conf[:PROMPT][:MY_PROMPT][:PROMPT_I].
+    #
+    # @param new_normal [String]
+    def normal=(new_normal)
+      @irb_prompt_options[:PROMPT_I] = new_normal
+    end
+
+    # @return [String]
+    def normal
+      @irb_prompt_options[:PROMPT_I]
+    end
+
+    # Wrapper for setting IRB.conf[:PROMPT][:MY_PROMPT][:RETURN]. The prompt
+    # for how to display return values.
+    #
+    # @param new_return_format [String]
+    def return_format=(new_return_format)
+      @irb_prompt_options[:RETURN] = new_return_format
+    end
+
+    # @return [String]
+    def return_format
+      @irb_prompt_options[:RETURN]
     end
   end
 end
