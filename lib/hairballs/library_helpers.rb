@@ -1,4 +1,5 @@
 require 'hairballs/ext/kernel_vputs'
+require 'fiber'
 
 class Hairballs
   # Helpers specifying and requiring dependencies for Themes and Plugins.
@@ -7,11 +8,7 @@ class Hairballs
     def libraries(libs=nil)
       return @libraries if @libraries && libs.nil?
 
-      @libraries = if libs
-                     libs
-                   else
-                     yield([])
-                   end
+      @libraries = libs ? libs : yield([])
     end
 
     # Requires #libraries on load.  If they're not installed, install them.  If
@@ -19,9 +16,7 @@ class Hairballs
     def require_libraries
       return if @libraries.nil?
 
-      install_threads = []
-      require_threads = []
-      require_queue = Queue.new
+      missing_dependencies = []
 
       @libraries.each do |lib|
         begin
@@ -29,11 +24,12 @@ class Hairballs
           require lib
           vputs "[**:#{@name}](#{lib}) Successfully required library!"
         rescue LoadError
-          puts "#{lib} not installed; installing now..."
-          install_threads << start_install_thread(lib, require_queue)
-          require_threads << start_require_thread(require_queue)
+          vputs "[**:#{@name}](#{lib}) Unable to require; adding to install list..."
+          missing_dependencies << lib
         end
       end
+
+      install_missing_dependencies(missing_dependencies, new_dependency_requirer(dependency_installer)).resume
     end
 
     # Path to the highest version of the gem with the given gem.
@@ -51,17 +47,21 @@ class Hairballs
     #
     # TODO: Use #find_latest_gem for each of #libraries.
     def do_bundler_extending
+      vputs "[**:#{@name}] #do_bundler_extending: #{@libraries}"
+
       if defined?(::Bundler)
-        vputs "[**:#{@name}] Libraries: #{@libraries}"
+        vputs "[**:#{@name}] #do_bundler_extending: Libraries: #{@libraries}"
+
         all_global_gem_paths = Dir.glob("#{Gem.dir}/gems/*")
 
         all_global_gem_paths.each do |p|
+          next unless @libraries.any? { |l| p.include?(l) }
           gem_path = "#{p}/lib"
-          vputs "[**:#{@name}] Adding to $LOAD_PATH: #{gem_path}"
+          vputs "[**:#{@name}] #do_bundler_extending: Adding to $LOAD_PATH: #{gem_path}"
           $LOAD_PATH.unshift(gem_path)
         end
       else
-        vputs %[[**:#{@name}] Bundler not defined.  Skipping.]
+        vputs %([**:#{@name}] #do_bundler_extending: Bundler not defined. Skipping.)
       end
     end
 
@@ -77,7 +77,7 @@ class Hairballs
           $LOAD_PATH.delete(gem_path)
         end
       else
-        vputs %[[**:#{@name}] Bundler not defined.  Skipping.]
+        vputs %([**:#{@name}] Bundler not defined.  Skipping.)
       end
     end
 
@@ -87,35 +87,69 @@ class Hairballs
 
     private
 
-    # @param [String] lib Gem to install.
-    # @param [Queue] require_queue Queue to push library names onto so the
-    #   require thread can do its requiring.
-    # @return [Thread]
-    def start_install_thread(lib, require_queue)
-      Thread.new do
-        result = Gem.install(lib)
-
-        if result.empty?
-          puts "Unable to install gem '#{lib}'. Moving on..."
-        else
-          require_queue << lib
+    # @param deps [Array<String>] Names of the gems to install.
+    # @param source [Fiber]
+    # @retrun [Fiber]
+    def install_missing_dependencies(deps, source)
+      Fiber.new do
+        deps.each do |lib|
+          vputs "[**:#{@name}] #install_missing_dependencies Main dep... #{lib}"
+          source.resume(lib)
         end
       end
     end
 
-    # @param [Queue] require_queue
-    # @return [Thread]
-    def start_require_thread(require_queue)
-      Thread.new do
-        lib = require_queue.pop
+    # @return [Fiber]
+    def dependency_installer
+      Fiber.new do |lib|
+        loop do
+          vputs "[**:#{@name}] #dependency_installer installing #{lib}"
+          require 'rubygems/commands/install_command'
 
-        if Hairballs.config.rails?
-          installed_gem = find_latest_gem(lib)
-          $LOAD_PATH.unshift("#{installed_gem}/lib")
+          cmd = Gem::Commands::InstallCommand.new
+          cmd.handle_options [lib]
+
+          begin
+            cmd.execute
+          rescue Gem::SystemExitException, Gem::RemoveFetcher::FetchError => ex
+            puts "Got exception during '#{lib}' install: #{ex.class}: #{ex.message}"
+            result = ex.exit_code
+          end
+
+          vputs "[**:#{@name}] #dependency_installer Gem install of #{lib} done."
+          puts "Unable to install gem '#{lib}'. Moving on..." if result > 0
+
+          lib = Fiber.yield
+          vputs "[**:#{@name}] #dependency_installer yield result: #{lib}"
         end
+      end
+    end
 
-        require lib
-      end.join
+    # @param [Queue] installer
+    # @return [Fiber]
+    def new_dependency_requirer(installer)
+      Fiber.new do |lib|
+        loop do
+          vputs "[**:#{@name}] #new_dependency_requirer resumed for #{lib}"
+          installer.resume(lib)
+          vputs "[**:#{@name}] #new_dependency_requirer requiring lib #{lib}"
+
+          if Hairballs.config.rails?
+            installed_gem = find_latest_gem(lib)
+            vputs "[**:#{@name}] #new_dependency_requirer: Gem installed at #{installed_gem}"
+            $LOAD_PATH.unshift("#{installed_gem}/lib")
+          end
+
+          begin
+            require lib
+          rescue LoadError => ex
+            puts "Got exception during #{lib} require: #{ex}"
+          end
+
+          vputs %([**:#{@name}] #new_dependency_requirer yielding...)
+          lib = Fiber.yield
+        end
+      end
     end
   end
 end

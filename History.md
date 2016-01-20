@@ -6,6 +6,8 @@
 
 * For `Plugin`s, only try to require libraries if some are given for the plugin.
 * Changed `quick_benchmark` default to 20 iterations (from 100).
+* Changed `Hairballs::LibraryHelpers` to use Fibers instead of Threads for
+  installing dependecies. Threaded installing was proving to be problematic.
 
 ### Bug Fixes
 

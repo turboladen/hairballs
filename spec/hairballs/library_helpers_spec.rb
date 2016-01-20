@@ -49,6 +49,8 @@ RSpec.describe Hairballs::LibraryHelpers do
 
     context '@libraries is not nil' do
       let(:lib_name) { 'asdfqwer' }
+      let(:dependency_requirer) { instance_double 'Fiber' }
+      let(:dependency_installer) { instance_double 'Fiber' }
 
       before do
         subject.instance_variable_set(:@libraries, [lib_name])
@@ -57,10 +59,11 @@ RSpec.describe Hairballs::LibraryHelpers do
 
       context 'libraries are not installed' do
         it 'tries two times to require then Gem.install' do
-          expect(subject).to receive(:start_install_thread).
-            with(lib_name, instance_of(Queue))
-          expect(subject).to receive(:start_require_thread).
-            with(instance_of(Queue))
+          expect(subject).to receive(:new_dependency_requirer).
+            with(instance_of(Fiber)).and_return(dependency_requirer)
+          expect(subject).to receive(:install_missing_dependencies).
+            with([lib_name], dependency_requirer).and_return(dependency_installer)
+          expect(dependency_installer).to receive(:resume)
 
           subject.require_libraries
         end
@@ -74,63 +77,23 @@ RSpec.describe Hairballs::LibraryHelpers do
     end
   end
 
-  describe '#start_install_thread' do
-    before { allow(Thread).to receive(:new).and_yield }
-    let(:require_queue) { instance_double 'Queue' }
-    let(:lib_name) { 'some lib' }
+  describe '#install_missing_dependencies' do
+    let(:source) { instance_double 'Fiber' }
+    before { expect(Fiber).to receive(:new).and_yield }
 
-    context 'gem exists' do
-      let(:gem) { double 'Gem::Specification' }
+    context 'deps are empty' do
+      it 'never resumes the source fiber' do
+        expect(source).to_not receive(:resume)
 
-      it 'puts the library name on the require_queue' do
-        expect(Gem).to receive(:install).with(lib_name).and_return([gem])
-        expect(require_queue).to receive(:<<).with(lib_name)
-
-        subject.send(:start_install_thread, lib_name, require_queue)
+        subject.send(:install_missing_dependencies, [], source)
       end
     end
 
-    context 'gem does not exist' do
-      it 'does not put the library name on the require_queue' do
-        expect(Gem).to receive(:install).with(lib_name).and_return([])
-        expect(require_queue).to_not receive(:<<)
+    context 'deps are not empty' do
+      it 'resumes the source fiber with the name of the dep' do
+        expect(source).to receive(:resume).with('meow')
 
-        subject.send(:start_install_thread, lib_name, require_queue)
-      end
-    end
-  end
-
-  describe '#start_require_thread' do
-    let(:require_queue) { instance_double 'Queue' }
-    let(:lib_name) { 'test name' }
-    let(:thread) { instance_double('Thread', join: nil) }
-    before { allow(Thread).to receive(:new).and_yield.and_return(thread) }
-
-    context 'rails' do
-      before { expect(Hairballs.config).to receive(:rails?).and_return(true) }
-
-      it 'finds the latest gem and adds it to the load path' do
-        lib_path = 'path to lib'
-        expect(require_queue).to receive(:pop).and_return(lib_name)
-        expect(subject).to receive(:find_latest_gem).with(lib_name).
-          and_return(lib_path)
-        expect($LOAD_PATH).to receive(:unshift).with('path to lib/lib')
-        expect(subject).to receive(:require).with(lib_name)
-
-        subject.send(:start_require_thread, require_queue)
-      end
-    end
-
-    context 'not rails' do
-      before { expect(Hairballs.config).to receive(:rails?).and_return(false) }
-
-      it 'does not find the latest gem and add it to the load path' do
-        expect(require_queue).to receive(:pop).and_return(lib_name)
-        expect(subject).to_not receive(:find_latest_gem)
-        expect($LOAD_PATH).to_not receive(:unshift)
-        expect(subject).to receive(:require).with(lib_name)
-
-        subject.send(:start_require_thread, require_queue)
+        subject.send(:install_missing_dependencies, ['meow'], source)
       end
     end
   end
