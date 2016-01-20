@@ -95,34 +95,22 @@ RSpec.describe Hairballs::Configuration do
   describe '#add_plugin' do
     let(:plugin) { double 'Hairballs::Plugin' }
 
-    context 'block given and name param is a Symbol' do
-      before do
-        expect(Hairballs::Plugin).to receive(:new).with(:test, {}).
-          and_return plugin
-      end
-
-      it 'yields the Plugin' do
-        expect { |b| subject.add_plugin(:test, &b) }.to yield_with_args(plugin)
-      end
-
-      it 'adds the Plugin to @plugins' do
-        expect(subject.plugins).to receive(:<<).with(plugin)
-        subject.add_plugin(:test) { |_| }
-      end
-
-      it 'returns the Plugin' do
-        expect(subject.add_plugin(:test) { |_| }).to eq plugin
-      end
+    before do
+      expect(Hairballs::Plugin).to receive(:new).with(:test, {}).
+        and_return plugin
     end
 
-    context 'no block given' do
-      before do
-        allow(Hairballs::Plugin).to receive(:new).and_return plugin
-      end
+    it 'yields the Plugin' do
+      expect { |b| subject.add_plugin(:test, &b) }.to yield_with_args(plugin)
+    end
 
-      it 'raises a LocalJumpError' do
-        expect { subject.add_plugin(:test) }.to raise_exception(LocalJumpError)
-      end
+    it 'adds the Plugin to @plugins' do
+      expect(subject.plugins).to receive(:<<).with(plugin)
+      subject.add_plugin(:test) { |_| }
+    end
+
+    it 'returns the Plugin' do
+      expect(subject.add_plugin(:test) { |_| }).to eq plugin
     end
   end
 
