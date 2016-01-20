@@ -1,3 +1,4 @@
+require 'rubygems/commands/install_command'
 require 'hairballs/ext/kernel_vputs'
 require 'fiber'
 
@@ -20,16 +21,17 @@ class Hairballs
 
       @libraries.each do |lib|
         begin
-          vputs "[**:#{@name}](#{lib}) Requiring library..."
-          require lib
-          vputs "[**:#{@name}](#{lib}) Successfully required library!"
+          vrequire(lib)
         rescue LoadError
+          # rubocop:disable Metrics/LineLength
           vputs "[**:#{@name}](#{lib}) Unable to require; adding to install list..."
+          # rubocop:enable Metrics/LineLength
           missing_dependencies << lib
         end
       end
 
-      install_missing_dependencies(missing_dependencies, new_dependency_requirer(dependency_installer)).resume
+      requirer = new_dependency_requirer(dependency_installer)
+      install_missing_dependencies(missing_dependencies, requirer).resume
     end
 
     # Path to the highest version of the gem with the given gem.
@@ -57,7 +59,9 @@ class Hairballs
         all_global_gem_paths.each do |p|
           next unless @libraries.any? { |l| p.include?(l) }
           gem_path = "#{p}/lib"
+          # rubocop:disable Metrics/LineLength
           vputs "[**:#{@name}] #do_bundler_extending: Adding to $LOAD_PATH: #{gem_path}"
+          # rubocop:enable
           $LOAD_PATH.unshift(gem_path)
         end
       else
@@ -87,6 +91,13 @@ class Hairballs
 
     private
 
+    # @param lib [String]
+    def vrequire(lib)
+      vputs "[**:#{@name}](#{lib}) Requiring library..."
+      require lib
+      vputs "[**:#{@name}](#{lib}) Successfully required library!"
+    end
+
     # @param deps [Array<String>] Names of the gems to install.
     # @param source [Fiber]
     # @retrun [Fiber]
@@ -104,17 +115,7 @@ class Hairballs
       Fiber.new do |lib|
         loop do
           vputs "[**:#{@name}] #dependency_installer installing #{lib}"
-          require 'rubygems/commands/install_command'
-
-          cmd = Gem::Commands::InstallCommand.new
-          cmd.handle_options [lib]
-
-          begin
-            cmd.execute
-          rescue Gem::SystemExitException, Gem::RemoveFetcher::FetchError => ex
-            puts "Got exception during '#{lib}' install: #{ex.class}: #{ex.message}"
-            result = ex.exit_code
-          end
+          result = install_gem(lib)
 
           vputs "[**:#{@name}] #dependency_installer Gem install of #{lib} done."
           puts "Unable to install gem '#{lib}'. Moving on..." if result > 0
@@ -123,6 +124,23 @@ class Hairballs
           vputs "[**:#{@name}] #dependency_installer yield result: #{lib}"
         end
       end
+    end
+
+    # @param lib [String]
+    # @return [Fixnum] Exit code from the Gem::Commands::InstallCommand.
+    def install_gem(lib)
+      cmd = Gem::Commands::InstallCommand.new
+      cmd.handle_options [lib]
+      result = 0
+
+      begin
+        cmd.execute
+      rescue Gem::SystemExitException, Gem::RemoveFetcher::FetchError => ex
+        puts "Got exception during '#{lib}' install: #{ex.class}: #{ex.message}"
+        result = ex.exit_code
+      end
+
+      result
     end
 
     # @param [Queue] installer

@@ -123,7 +123,9 @@ class Hairballs
 
       plugin
     rescue => ex
+      # rubocop:disable Metrics/LineLength
       vputs "[config] Exception adding plugin: #{ex.class}: #{ex.message}\n#{ex.backtrace[0]}"
+      # rubocop:enable Metrics/LineLength
     end
 
     # Searches for the Hairballs::Plugin by the +plugin_name+, then loads it.

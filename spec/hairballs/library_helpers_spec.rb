@@ -62,7 +62,8 @@ RSpec.describe Hairballs::LibraryHelpers do
           expect(subject).to receive(:new_dependency_requirer).
             with(instance_of(Fiber)).and_return(dependency_requirer)
           expect(subject).to receive(:install_missing_dependencies).
-            with([lib_name], dependency_requirer).and_return(dependency_installer)
+            with([lib_name], dependency_requirer).
+            and_return(dependency_installer)
           expect(dependency_installer).to receive(:resume)
 
           subject.require_libraries
