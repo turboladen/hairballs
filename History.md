@@ -1,6 +1,6 @@
 # Change Log
 
-## [unreleased] / yyyy-mm-dd
+## 0.2.1 / 2016-01-21
 
 ### Bug Fixes
 
