@@ -1,6 +1,12 @@
 # Change Log
 
-## [unreleased] / yyyy-mm-dd
+## 0.2.1 / 2016-01-21
+
+### Bug Fixes
+
+* Fix rescue of `Gem::RemoveFetcher`; should be `RemoteFetcher`.
+
+## 0.2.0 / 2016-01-20
 
 ### Improvements
 
