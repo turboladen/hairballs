@@ -2,6 +2,12 @@
 
 ## [unreleased] / yyyy-mm-dd
 
+### Bug Fixes
+
+* Fix rescue of `Gem::RemoveFetcher`; should be `RemoteFetcher`.
+
+## 0.2.0 / 2016-01-20
+
 ### Improvements
 
 * For `Plugin`s, only try to require libraries if some are given for the plugin.

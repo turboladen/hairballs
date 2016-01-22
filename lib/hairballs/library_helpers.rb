@@ -135,7 +135,7 @@ class Hairballs
 
       begin
         cmd.execute
-      rescue Gem::SystemExitException, Gem::RemoveFetcher::FetchError => ex
+      rescue Gem::SystemExitException, Gem::RemoteFetcher::FetchError => ex
         puts "Got exception during '#{lib}' install: #{ex.class}: #{ex.message}"
         result = ex.exit_code
       end
